@@ -1,0 +1,41 @@
+.container_main {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    max-height: 656px;
+    /* overflow-y: scroll; */
+    position: relative;
+}
+
+.element_locked {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 40px;
+    /* column-gap: 8px; */
+    /* background: var(--interface-modal-bg, #1C1C21); */
+}
+
+.elementcontainer {
+    overflow-y: scroll;
+    max-height: 464px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.sum_container {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    column-gap: 48px;
+    justify-content: flex-end;
+}
+
+.price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 8px;
+}
+
