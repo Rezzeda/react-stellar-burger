@@ -29,13 +29,13 @@ export default function BurgerConstructor({setModal}) {
 
     return (
     <div>
-      <div className={cn(styles.container_main, 'mt-25')}>
+      <div className={cn(styles.container_main)}>
         {bunItem && (
           <div className={cn(styles.element_locked, 'pl-4')}>
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={bunItem.name}
+              text={`${bunItem.name} (верх)`}
               price={bunItem.price}
               thumbnail={bunItem.image}
               onUpdateTotalPrice={updateTotalPrice}
@@ -44,7 +44,7 @@ export default function BurgerConstructor({setModal}) {
         )}
         <div className={cn(styles.elementcontainer, 'custom-scroll', 'pl-4')}>
         {otherItems.map((item, index) => (
-            <div key={index} >
+            <div className={cn(styles.element_main)} key={index} >
               <DragIcon type="primary" />
               <ConstructorElement
                 text={item.name}
@@ -60,7 +60,7 @@ export default function BurgerConstructor({setModal}) {
             <ConstructorElement
               type="bottom"
               isLocked={true}
-              text={bunItem.name}
+              text={`${bunItem.name} (низ)`}
               price={bunItem.price}
               thumbnail={bunItem.image}
               onUpdateTotalPrice={updateTotalPrice}
@@ -75,7 +75,7 @@ export default function BurgerConstructor({setModal}) {
             </div>
             <Button htmlType="button"
             type="primary"
-            size="medium"
+            size="large"
             onClick={() => setModal(true)}
             >
               Оформить заказ

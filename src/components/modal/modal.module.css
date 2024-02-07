@@ -1,15 +1,13 @@
 .modal_container {
     display: flex;
     flex-direction: column;
-    width: 720px;
     max-width: 100%;
     border-radius: 40px;
     border: 1px solid  rgba(76, 76, 255, 0.20);
     background:  #1C1C21;
     box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 8px 0px rgba(0, 0, 0, 0.04), 0px 16px 24px 0px rgba(0, 0, 0, 0.04), 0px 24px 32px 0px rgba(0, 0, 0, 0.04);
     position: relative;
-    margin: 0 20px;
-    height: 538px;
+    box-sizing: border-box;
 }
 
 .container {

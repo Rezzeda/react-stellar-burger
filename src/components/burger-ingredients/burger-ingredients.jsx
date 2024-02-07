@@ -3,35 +3,42 @@ import BurgerIngredientsTabs from "../burger-ingredients-tabs/burger-ingredients
 import Category from "../category/category";
 import cn from "classnames";
 
-
 export default function BurgerIngredients(props) {
     // console.log(props);
-    const {ingredients} = props;
-    // console.log(ingredients);
+    const { ingredients, setModal} = props;
+//   console.log(ingredients);
 
- //возвращаем ключи типов ингредиентов
-    const typeNames = Object.keys(ingredients).map(key => {
-        return key;
+  //возвращаем ключи типов ингредиентов
+    const typeNames = Object.keys(ingredients).map((key) => {
+    return key;
     });
 
-    // console.log(typeNames);
     return (
-        <>
-            <BurgerIngredientsTabs typeNames = {typeNames}/>
-            <div className={cn(styles.container, 'custom-scroll')}>
-                <h2 className={cn('text text_type_main-medium')}>Булки</h2>
-                <ul className={cn(styles.ingredients__list, 'custom-scroll')}>
-                    <li className={cn(styles.category, 'mb-10')}><Category /></li>
-                    <li className={cn(styles.category, 'mb-10')}><Category /></li>
-                    <li className={cn(styles.category, 'mb-10')}><Category /></li>
-                </ul>
-                <h2 className={cn('text text_type_main-medium')}>Соусы</h2>
-                <ul className={cn(styles.ingredients__list, 'custom-scroll')}>
-                    <li className={cn(styles.category, 'mb-10')}><Category /></li>
-                    <li className={cn(styles.category, 'mb-10')}><Category /></li>
-                    <li className={cn(styles.category, 'mb-10')}><Category /></li>
-                </ul>
-            </div>
-        </>
-    )
+    <>
+        <BurgerIngredientsTabs typeNames={typeNames} />
+        <div className={cn(styles.container, "custom-scroll")}>
+            {/* Выводим список ингредиентов для каждой категории */}
+            {typeNames.map((type) => (
+                <div key={type}>
+                    <h2 className={cn("text text_type_main-medium")}>{type}</h2>
+                    <ul className={cn(styles.ingredients__list, "custom-scroll")}>
+                        {/* Выводим ингредиенты для текущей категории */}
+                        {ingredients[type].map((ingredient) => (
+                            <li key={ingredient._id} className={cn(styles.category, 'mb-10')}>
+                                <Category 
+                                image={ingredient.image} 
+                                price={ingredient.price} 
+                                name={ingredient.name}
+                                // _id={ingredient._id}
+                                // onClick={() => setModal(true)}
+                                onClick={() => setModal({ ...ingredient, showModal: true })}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </div>
+    </>
+    );
 }

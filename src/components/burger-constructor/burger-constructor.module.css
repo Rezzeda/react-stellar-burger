@@ -16,6 +16,12 @@
     /* background: var(--interface-modal-bg, #1C1C21); */
 }
 
+.element_main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .elementcontainer {
     overflow-y: scroll;
     max-height: 464px;

@@ -1,13 +1,12 @@
-import React from 'react';
 import styles from './modal.module.css';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { createPortal } from 'react-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import cn from "classnames";
 
 
-export default function Modal({ isVisible = false, title, children, onClose, className }) {
+export default function Modal({ isVisible = false, title, children, onClose, className, style }) {
     
     const modals = document.getElementById('modals')
 
@@ -32,7 +31,7 @@ export default function Modal({ isVisible = false, title, children, onClose, cla
 
     return createPortal(
         <ModalOverlay onClose={onClose}>
-            <div className={cn(styles.modal_container, 'p-10')}>
+            <div className={cn(styles.modal_container, 'p-10')} style={style}>
                 <div className={cn(styles.container)}>
                     <h2 className={cn(className, styles.title)}>{title}</h2>
                     <CloseIcon type="primary" onClick={onClose} />
