@@ -7,13 +7,13 @@ import { useEffect, useState } from "react";
 import cn from "classnames";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-
+import Modal from "../modal/modal";
 
 
 export default function App() {
   
   const [orderDetailsModal, setOrderDetailsModal] = useState(false);
-  const [ingredientDetailsModal, setIngredientDetailsModal] = useState([]);
+  const [ingredientDetailsModal, setIngredientDetailsModal] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   
   useEffect(() => {
@@ -27,16 +27,16 @@ export default function App() {
         console.error(`Ошибка при выгрузке с сервера: ${error}`);
       }
     });
-    }, []);
+  }, []);
 
-    //сортировка ингредиентов по типу
-    const ingredientTypes = ingredients.reduce((result, ingredient) => {
-      if (!result[ingredient.type]) {
-        result[ingredient.type] = [];
-      }
-      result[ingredient.type].push(ingredient);
-      return result;
-    }, {});
+  //сортировка ингредиентов по типу
+  const ingredientTypes = ingredients.reduce((result, ingredient) => {
+    if (!result[ingredient.type]) {
+      result[ingredient.type] = [];
+    }
+    result[ingredient.type].push(ingredient);
+    return result;
+  }, {});
 
   return (
     <div className={styles.app}>
@@ -44,21 +44,20 @@ export default function App() {
       <main className={styles.content}>
         <div className={styles.container}>
           <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-          <BurgerIngredients ingredients={ingredientTypes} setModal={setIngredientDetailsModal} />
+          <BurgerIngredients ingredients={ingredientTypes} setModal={setIngredientDetailsModal} style={{ width: '720px', height: '718px' }}/>
         </div>
         <div className={cn(styles.container, 'mt-25')}>
           <BurgerConstructor setModal={setOrderDetailsModal} />
         </div>
       </main>
-      <OrderDetails modal={orderDetailsModal} setModal={setOrderDetailsModal}/>
-      <IngredientDetails
-      ingredients={ingredients}
-      modal={ingredientDetailsModal.showModal}
-      setModal={setIngredientDetailsModal}
-      selectedIngredient={ingredientDetailsModal}
-      />
+      <Modal isVisible={orderDetailsModal} onClose={() => setOrderDetailsModal(false)}>
+        <OrderDetails />
+      </Modal>
+      {ingredientDetailsModal && (
+        <Modal isVisible={true} onClose={() => setIngredientDetailsModal(null)} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
+          <IngredientDetails selectedIngredient={ingredientDetailsModal} />
+        </Modal>
+      )}
     </div>
   );
 }
-
-

@@ -5,10 +5,8 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 import { useEffect } from "react";
 import cn from "classnames";
 
-
-export default function Modal({ isVisible = false, title, children, onClose, className, style }) {
-    
-    const modals = document.getElementById('modals')
+export default function Modal({ isVisible = false, title, children, onClose, style }) {
+    const modals = document.getElementById('modals');
 
     useEffect(() => {
         const keydownHandler = (event) => {
@@ -30,15 +28,17 @@ export default function Modal({ isVisible = false, title, children, onClose, cla
     }
 
     return createPortal(
-        <ModalOverlay onClose={onClose}>
-            <div className={cn(styles.modal_container, 'p-10')} style={style}>
-                <div className={cn(styles.container)}>
-                    <h2 className={cn(className, styles.title)}>{title}</h2>
-                    <CloseIcon type="primary" onClick={onClose} />
+        <div className={cn(styles.modal)}>
+            <ModalOverlay onClose={onClose}>
+                <div className={cn(styles.modal_container, 'p-10')} style={style}>
+                    <div className={cn(styles.container)}>
+                        <h2 className={cn('text text_type_main-large', styles.title)}>{title}</h2>
+                        <CloseIcon type="primary" onClick={onClose} />
+                    </div>
+                    {children}
                 </div>
-                {children}
-            </div>
-        </ModalOverlay>,
+            </ModalOverlay>
+        </div>,
         modals
     );
 }
