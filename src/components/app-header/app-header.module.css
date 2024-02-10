@@ -1,0 +1,36 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    background: var(--interface-modal-bg, #1C1C21);
+    position: relative;
+}
+
+.left_container {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+}
+
+.item {
+    list-style-type: none;
+}
+
+.link {
+    text-decoration: none;
+    color: #f2f2f3;
+    display: flex;
+    flex-direction: row;
+    column-gap: 8px;
+    padding: 16px 20px;
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
