@@ -2,6 +2,8 @@ import styles from "./burger-ingredients.module.css";
 import BurgerIngredientsTabs from "../burger-ingredients-tabs/burger-ingredients-tabs";
 import Category from "../category/category";
 import cn from "classnames";
+import PropTypes from 'prop-types';
+
 
 export default function BurgerIngredients(props) {
     // console.log(props);
@@ -42,3 +44,17 @@ export default function BurgerIngredients(props) {
     </>
     );
 }
+
+BurgerIngredients.propTypes = {
+    ingredients: PropTypes.objectOf(
+        PropTypes.arrayOf(
+        PropTypes.shape({
+            _id: PropTypes.string.isRequired,
+            image: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+        })
+        )
+    ).isRequired,
+    setModal: PropTypes.func.isRequired,
+};

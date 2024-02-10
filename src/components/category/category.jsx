@@ -13,7 +13,7 @@ export default function Category(props) {
             <Counter count={1} size="default" extraClass="m-1" />
             <div className={styles.item}>
                 <div className={styles.item_img}>
-                <img src={image} alt="burger" />
+                <img src={image} alt={name} />
                 </div>
                 <div className={styles.container}>
                 <div className={styles.price}>

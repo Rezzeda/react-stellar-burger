@@ -1,8 +1,6 @@
 import styles from "./order-details.module.css";
-import Modal from "../modal/modal";
 import cn from "classnames";
 import doneIcon from '../../images/done.svg'
-import PropTypes from 'prop-types';
 
 
 export default function OrderDetails() {

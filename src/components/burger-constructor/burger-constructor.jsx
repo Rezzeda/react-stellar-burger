@@ -4,6 +4,8 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import cn from 'classnames';
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import {useState, useEffect} from "react";
+import PropTypes from 'prop-types';
+
 
 
 export default function BurgerConstructor({setModal}) {
@@ -84,3 +86,7 @@ export default function BurgerConstructor({setModal}) {
     </div>
     )
   }
+
+  BurgerConstructor.propTypes = {
+    setModal: PropTypes.func.isRequired,
+  };

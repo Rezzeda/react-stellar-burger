@@ -1,5 +1,4 @@
 import styles from "./ingredient-details.module.css";
-import Modal from "../modal/modal";
 import cn from "classnames";
 import PropTypes from 'prop-types';
 
@@ -33,3 +32,14 @@ export default function IngredientDetails({ selectedIngredient }) {
         </div>
     );
 }
+
+IngredientDetails.propTypes = {
+    selectedIngredient: PropTypes.shape({
+        image: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        calories: PropTypes.number.isRequired,
+        proteins: PropTypes.number.isRequired,
+        fat: PropTypes.number.isRequired,
+        carbohydrates: PropTypes.number.isRequired,
+    }).isRequired,
+};

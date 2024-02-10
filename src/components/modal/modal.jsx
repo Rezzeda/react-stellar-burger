@@ -4,6 +4,8 @@ import { createPortal } from 'react-dom';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { useEffect } from "react";
 import cn from "classnames";
+import PropTypes from 'prop-types';
+
 
 export default function Modal({ isVisible = false, title, children, onClose, style }) {
     const modals = document.getElementById('modals');
@@ -42,3 +44,11 @@ export default function Modal({ isVisible = false, title, children, onClose, sty
         modals
     );
 }
+
+Modal.propTypes = {
+    isVisible: PropTypes.bool,
+    title: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+    onClose: PropTypes.func.isRequired,
+    style: PropTypes.object,
+};

@@ -15,19 +15,21 @@ export default function App() {
   const [orderDetailsModal, setOrderDetailsModal] = useState(false);
   const [ingredientDetailsModal, setIngredientDetailsModal] = useState(null);
   const [ingredients, setIngredients] = useState([]);
-  
+
   useEffect(() => {
     getIngredients()
     .then(res => {
-      try {
-        if (res.success){
-          setIngredients(res.data);
+        if (res.success) {
+            setIngredients(res.data);
+        } else {
+            console.error('Не удалось получить данные об ингредиентах');
         }
-      } catch(error){
-        console.error(`Ошибка при выгрузке с сервера: ${error}`);
-      }
+    })
+    .catch(error => {
+        console.error(`Ошибка при запросе к серверу: ${error}`);
     });
-  }, []);
+}, []);
+
 
   //сортировка ингредиентов по типу
   const ingredientTypes = ingredients.reduce((result, ingredient) => {
@@ -44,13 +46,13 @@ export default function App() {
       <main className={styles.content}>
         <div className={styles.container}>
           <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-          <BurgerIngredients ingredients={ingredientTypes} setModal={setIngredientDetailsModal} style={{ width: '720px', height: '718px' }}/>
+          <BurgerIngredients ingredients={ingredientTypes} setModal={setIngredientDetailsModal} />
         </div>
         <div className={cn(styles.container, 'mt-25')}>
           <BurgerConstructor setModal={setOrderDetailsModal} />
         </div>
       </main>
-      <Modal isVisible={orderDetailsModal} onClose={() => setOrderDetailsModal(false)}>
+      <Modal isVisible={orderDetailsModal} title={''} onClose={() => setOrderDetailsModal(false)} style={{ width: '720px', height: '718px' }}>
         <OrderDetails />
       </Modal>
       {ingredientDetailsModal && (
