@@ -5,10 +5,15 @@ import cn from 'classnames';
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import {useState, useEffect} from "react";
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 
 export default function BurgerConstructor({setModal}) {
+
+  // const dispatch = useDispatch();
+  // const ingredients = useSelector((state) => state.ingredients.allIngredients);
 
   const [totalPrice, setTotalPrice] = useState(0);
 

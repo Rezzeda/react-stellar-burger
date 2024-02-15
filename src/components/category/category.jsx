@@ -2,6 +2,9 @@ import styles from "./category.module.css";
 import cn from "classnames";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
+import { useDispatch } from "react-redux";
+import { setCurrentCategory } from "../../services/categoriesSlice";
+import React from 'react';
 
 
 export default function Category(props) {
@@ -28,9 +31,9 @@ export default function Category(props) {
     );
 }
 
-Category.propTypes = {
-    image: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-};
+// Category.propTypes = {
+//     image: PropTypes.string.isRequired,
+//     price: PropTypes.number.isRequired,
+//     name: PropTypes.string.isRequired,
+//     onClick: PropTypes.func.isRequired,
+// };
