@@ -1,15 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ingredientsSlice from "./ingredientsSlice";
-import categorySlice from "./categoriesSlice";
-import burgerConstuctorSlice from ".//burgerConstuctorSlice";
+// import ingredientsSliceReducer, {ingredientsSlice} from "./ingredientsSlice";
+// import categorySlice from "./categoriesSlice";
+// import burgerConstuctorSlice from ".//burgerConstuctorSlice";
+import { rootReducer } from "./rootReducers";
 
 
 
 export const store = configureStore({
-    reducer: {
-        ingredients: ingredientsSlice,
-        category: categorySlice,
-        burgerConstuctor: burgerConstuctorSlice,
-    },
+    reducer: rootReducer,
+    //{
+        
+        // [ingredientsSlice.name]: ingredientsSliceReducer,
+        // category: categorySlice,
+        // burgerConstuctor: burgerConstuctorSlice,
+    //},
     devTools: process.env.NODE_ENV !== 'production',
 });

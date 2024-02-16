@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { fetchIngredients } from "../../services/ingredientsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState, useRef } from "react";
+import { selectorAllIngredients } from "../../services/selectors";
 
 
 // export default function BurgerIngredients(props) {
@@ -51,14 +52,15 @@ import React, { useEffect, useState, useRef } from "react";
 export default function BurgerIngredients(props) {
     const { setModal } = props;
     const dispatch = useDispatch();
-    const ingredients = useSelector((state) => state.ingredients.allIngredients);
+    // const ingredients = useSelector((state) => state.ingredients.allIngredients);
+    const ingredients = useSelector(selectorAllIngredients)
     const listTitleRefs = useRef({});
-    const [currentTab, setCurrentTab] = React.useState(null); // Состояние для хранения текущей вкладки
+    const [currentTab, setCurrentTab] = useState(null); // Состояние для хранения текущей вкладки
 
 
     useEffect(() => {
         dispatch(fetchIngredients());
-    }, [dispatch]);
+    }, []);
 
     useEffect(() => {
         if (currentTab && listTitleRefs.current[currentTab]) {

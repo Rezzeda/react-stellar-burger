@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getIngredients } from "../utils/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+const sliceName = "ingredients"
 
 const initialState = {
   allIngredients: [],
@@ -10,8 +11,8 @@ const initialState = {
 };
 
 
-const ingredientsSlice = createSlice({
-  name: "ingredients",
+export const ingredientsSlice = createSlice({
+  name: sliceName,
   initialState,
   reducers: {
 
@@ -34,7 +35,7 @@ const ingredientsSlice = createSlice({
 });
 
 export const fetchIngredients = createAsyncThunk(
-  "ingredients/fetchIngredients",
+  `${sliceName}/fetchIngredients`,
   async () => {
     try {
       const res = await getIngredients();
@@ -46,5 +47,5 @@ export const fetchIngredients = createAsyncThunk(
 );
 
 
-export const { setAllIngredients } = ingredientsSlice.actions;
+// export const { setAllIngredients } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;
