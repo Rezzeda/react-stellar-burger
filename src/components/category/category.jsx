@@ -2,18 +2,47 @@ import styles from "./category.module.css";
 import cn from "classnames";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { useDispatch } from "react-redux";
-import { setCurrentCategory } from "../../services/categoriesSlice";
-import React from 'react';
+import { useDrag } from 'react-dnd';
+import { selectorIngredientCounts } from '../../services/selectors';
+import { useSelector } from "react-redux";
 
+Category.propTypes = {
+    image: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+};
 
-export default function Category(props) {
-    const { image, price, name, onClick } = props;
+export default function Category({ image, price, name, type, _id, onClick, onDragStart} ) {
+
+    const [{ isDragging }, dragRef] = useDrag(() => ({
+        type: "INGREDIENT",
+        item: { image, price, name, type, _id },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    }));
+
+    const ingredientCounts = useSelector(selectorIngredientCounts);
+    // console.log(uniqueIngredientCounts);
+
+    // Найдем массив объектов ингредиентов с правильным _id в uniqueIngredientCounts
+    const ingredientArray = ingredientCounts[_id];
+    // Посчитаем общее количество для данного _id
+    // acc (аккумулятор) и cur (текущий элемент массива). 
+    // В каждой итерации она добавляет значение свойства count текущего элементак аккумулятору.
+    // 0 - это начальное значение аккумулятора, так как пока у нас еще нет суммы.
+    // : 0 - это условная операция. 
+    // Если ingredientArray равен null или undefined, то есть если нет ингредиентов с заданным _id, то count устанавливается в ноль.
+    const count = ingredientArray ? ingredientArray.reduce((acc, cur) => acc + cur.count, 0) : 0;
 
     return (
-        <div className={styles.category} onClick={onClick}>
+        <div className={styles.category} onClick={onClick} ref={dragRef}
+        onDragStart={onDragStart}
+        style={{ opacity: isDragging ? 0.5 : 1 }}>
             <article className={cn(styles.card, 'text text_type_main-medium mt-10')}>
-            <Counter count={1} size="default" extraClass="m-1" />
+            {count > 0 && <Counter count={count} size="default" extraClass="m-1" />}
+            {/* <Counter count={1} size="default" extraClass="m-1" /> */}
             <div className={styles.item}>
                 <div className={styles.item_img}>
                 <img src={image} alt={name} />
@@ -30,10 +59,3 @@ export default function Category(props) {
         </div>
     );
 }
-
-// Category.propTypes = {
-//     image: PropTypes.string.isRequired,
-//     price: PropTypes.number.isRequired,
-//     name: PropTypes.string.isRequired,
-//     onClick: PropTypes.func.isRequired,
-// };

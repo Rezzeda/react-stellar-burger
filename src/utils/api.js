@@ -16,3 +16,13 @@ export const getIngredients = () => {
     })
     .then(onResponse);
 }
+
+//Размещение заказа
+export function postOrder(data) {
+    return fetch(`${configApi.baseUrl}/orders`, {
+        method: 'POST',
+        headers: configApi.headers,
+        body: JSON.stringify(data),
+    })
+    .then(onResponse);
+}

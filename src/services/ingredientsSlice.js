@@ -8,15 +8,25 @@ const initialState = {
   allIngredients: [],
   loading: false, // Флаг для отслеживания состояния загрузки
   error: null, // Переменная для хранения ошибки, если она произойдет во время загрузки
+  currentTab: null,
 };
 
+export const fetchIngredients = createAsyncThunk(
+  `${sliceName}/fetchIngredients`,
+  async () => {
+    try {
+      const res = await getIngredients();
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 export const ingredientsSlice = createSlice({
   name: sliceName,
   initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -33,19 +43,5 @@ export const ingredientsSlice = createSlice({
       });
   },
 });
-
-export const fetchIngredients = createAsyncThunk(
-  `${sliceName}/fetchIngredients`,
-  async () => {
-    try {
-      const res = await getIngredients();
-      return res.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
-
-
-// export const { setAllIngredients } = ingredientsSlice.actions;
+export const { setCurrentTab, addIngredient, removeIngredient } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

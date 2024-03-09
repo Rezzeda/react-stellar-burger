@@ -1,34 +1,19 @@
 import styles from "./burger-ingredients-tabs.module.css";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import cn from "classnames";
-import React, {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from "react-redux";
-import { setCurrentCategory } from "../../services/categoriesSlice";
+import { typeToTitle } from "../../utils/constants";
 
-
-// export default function BurgerIngredientsTabs({typeNames}) {
-
-//     const [current, setCurrent] = React.useState(typeNames[0]);
-
-//     return (
-//         <div className={cn(styles.tabs, 'mb-10')}>
-//             {typeNames.map((type) => (
-//             <Tab
-//                 key={type}
-//                 value={type}
-//                 active={current === type}
-//                 onClick={setCurrent}
-//             >
-//                 {type}
-//             </Tab>
-//             ))}
-//         </div>
-//     )
-// }
 
 export default function BurgerIngredientsTabs({ typeNames, setCurrentTab }) {
-    const [current, setCurrent] = React.useState(typeNames[0]);
+    const [current, setCurrent] = useState(null);
+
+    useEffect(() => {
+        if (current === null && typeNames.length > 0) {
+            setCurrent(typeNames[0]);
+        }
+    }, [current, typeNames]);
 
     // Передаем тип текущей вкладки в родительский компонент для прокрутки к соответствующему <h2>
     const handleClick = (type) => {
@@ -45,7 +30,7 @@ export default function BurgerIngredientsTabs({ typeNames, setCurrentTab }) {
                     active={current === type}
                     onClick={() => handleClick(type)}
                 >
-                    {type}
+                    {typeToTitle[type] || type}
                 </Tab>
             ))}
         </div>

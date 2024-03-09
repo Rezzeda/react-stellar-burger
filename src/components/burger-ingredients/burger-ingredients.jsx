@@ -2,57 +2,14 @@ import styles from "./burger-ingredients.module.css";
 import BurgerIngredientsTabs from "../burger-ingredients-tabs/burger-ingredients-tabs";
 import Category from "../category/category";
 import cn from "classnames";
-import PropTypes from 'prop-types';
 import { fetchIngredients } from "../../services/ingredientsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { selectorAllIngredients } from "../../services/selectors";
+import { typeToTitle } from "../../utils/constants";
 
-
-// export default function BurgerIngredients(props) {
-//     // console.log(props);
-//     const { ingredients, setModal} = props;
-// //   console.log(ingredients);
-
-//   //возвращаем ключи типов ингредиентов
-//     const typeNames = Object.keys(ingredients).map((key) => {
-//     return key;
-//     });
-
-//     return (
-//     <>
-//         <BurgerIngredientsTabs typeNames={typeNames} />
-//         <div className={cn(styles.container, "custom-scroll")}>
-//             {/* Выводим список ингредиентов для каждой категории */}
-//             {typeNames.map((type) => (
-//                 <div key={type}>
-//                     <h2 className={cn("text text_type_main-medium")}>{type}</h2>
-//                     <ul className={cn(styles.ingredients__list, "custom-scroll")}>
-//                         {/* Выводим ингредиенты для текущей категории */}
-//                         {ingredients[type].map((ingredient) => (
-//                             <li key={ingredient._id} className={cn(styles.category, 'mb-10')}>
-//                                 <Category 
-//                                 image={ingredient.image} 
-//                                 price={ingredient.price} 
-//                                 name={ingredient.name}
-//                                 // _id={ingredient._id}
-//                                 // onClick={() => setModal(true)}
-//                                 onClick={() => setModal({ ...ingredient, showModal: true })}
-//                                 />
-//                             </li>
-//                         ))}
-//                     </ul>
-//                 </div>
-//             ))}
-//         </div>
-//     </>
-//     );
-// }
-
-export default function BurgerIngredients(props) {
-    const { setModal } = props;
+export default function BurgerIngredients({ setModal }) {
     const dispatch = useDispatch();
-    // const ingredients = useSelector((state) => state.ingredients.allIngredients);
     const ingredients = useSelector(selectorAllIngredients)
     const listTitleRefs = useRef({});
     const [currentTab, setCurrentTab] = useState(null); // Состояние для хранения текущей вкладки
@@ -82,7 +39,6 @@ export default function BurgerIngredients(props) {
     const handleTabChange = (type) => {
         setCurrentTab(type);
     };
-    
 
     return (
         <div className={cn(styles.container, "custom-scroll")}>
@@ -90,7 +46,7 @@ export default function BurgerIngredients(props) {
             {typeNames.map((type) => (
                 <div key={type}>
                     <h2 ref={(ref) => (listTitleRefs.current[type] = ref)} className={cn("text text_type_main-medium")}>
-                        {type}
+                        {typeToTitle[type] || type} 
                     </h2>
                     <ul className={cn(styles.ingredients__list, "custom-scroll")}>
                         {ingredientTypes[type].map(ingredient => (
