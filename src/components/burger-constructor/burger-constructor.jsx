@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { selectorBurgerBuns, selectorOtherIngredients } from '../../services/selectors';
-import DraggableIngredient from "../DraggableIngredient/DraggableIngredient";
+import DraggableIngredient from "../draggable-ingredient/draggable-ingredient";
 import {  addBun, addIngredient } from '../../services/burgerConstuctorSlice';
 import { useMemo } from "react";
 import { submitOrder } from '../../services/orderSlice';

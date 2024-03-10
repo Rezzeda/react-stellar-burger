@@ -1,9 +1,11 @@
-import styles from "./DraggableIngredient.module.css";
+import styles from "./draggable-ingredient.module.css";
 import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { reorderIngredient, removeIngredient } from '../../services/burgerConstuctorSlice';
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
+import { ingredientType } from '../../utils/types';
+import PropTypes from 'prop-types';
 
 
 export default function DraggableIngredient({ ingredient, index }) {
@@ -72,3 +74,8 @@ export default function DraggableIngredient({ ingredient, index }) {
         </div>
     );
 }
+
+DraggableIngredient.propTypes = {
+    ingredient: ingredientType.isRequired,
+    index: PropTypes.number.isRequired,
+};

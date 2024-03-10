@@ -18,24 +18,25 @@ export default function App() {
   return (
     <div className={styles.app}>
       <AppHeader />
+      <DndProvider backend={HTML5Backend}>
       <main className={styles.content}>
         <div className={styles.container}>
           <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-        <DndProvider backend={HTML5Backend}>
           <BurgerIngredients setModal={setIngredientDetailsModal}/>
-        </DndProvider>
         </div>
         <div className={cn(styles.container, 'mt-25')}>
-        <DndProvider backend={HTML5Backend}>
           <BurgerConstructor setModal={setOrderDetailsModal} />
-        </DndProvider>
         </div>
       </main>
-      <Modal isVisible={orderDetailsModal} title={''} onClose={() => setOrderDetailsModal(false)} style={{ width: '720px', height: '718px' }}>
-        <OrderDetails />
-      </Modal>
+      </DndProvider>
+      {orderDetailsModal && (
+        <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", height: "718px" }}
+        >
+          <OrderDetails />
+        </Modal>
+      )}
       {ingredientDetailsModal && (
-        <Modal isVisible={true} onClose={() => setIngredientDetailsModal(null)} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
+        <Modal onClose={() => setIngredientDetailsModal(null)} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
           <IngredientDetails selectedIngredient={ingredientDetailsModal} />
         </Modal>
       )}

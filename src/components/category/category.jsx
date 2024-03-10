@@ -6,13 +6,6 @@ import { useDrag } from 'react-dnd';
 import { selectorIngredientCounts } from '../../services/selectors';
 import { useSelector } from "react-redux";
 
-Category.propTypes = {
-    image: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-};
-
 export default function Category({ image, price, name, type, _id, onClick, onDragStart} ) {
 
     const [{ isDragging }, dragRef] = useDrag(() => ({
@@ -59,3 +52,10 @@ export default function Category({ image, price, name, type, _id, onClick, onDra
         </div>
     );
 }
+
+Category.propTypes = {
+    image: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+};

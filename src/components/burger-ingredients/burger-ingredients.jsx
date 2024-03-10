@@ -17,7 +17,7 @@ export default function BurgerIngredients({ setModal }) {
 
     useEffect(() => {
         dispatch(fetchIngredients());
-    }, [dispatch]);
+    }, []);
 
     const ingredientTypes = ingredients ? ingredients.reduce((result, ingredient) => {
         if (!result[ingredient.type]) {
