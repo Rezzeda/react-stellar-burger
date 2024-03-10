@@ -12,18 +12,12 @@ export default function BurgerIngredients({ setModal }) {
     const dispatch = useDispatch();
     const ingredients = useSelector(selectorAllIngredients)
     const listTitleRefs = useRef({});
-    const [currentTab, setCurrentTab] = useState(null); // Состояние для хранения текущей вкладки
+    const [currentTab, setCurrentTab] = useState(0); // Состояние для хранения текущей вкладки
 
 
     useEffect(() => {
         dispatch(fetchIngredients());
-    }, []);
-
-    useEffect(() => {
-        if (currentTab && listTitleRefs.current[currentTab]) {
-            listTitleRefs.current[currentTab].scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [currentTab]);
+    }, [dispatch]);
 
     const ingredientTypes = ingredients ? ingredients.reduce((result, ingredient) => {
         if (!result[ingredient.type]) {
@@ -35,17 +29,43 @@ export default function BurgerIngredients({ setModal }) {
 
     const typeNames = Object.keys(ingredientTypes);
 
-// Функция для прокрутки к соответствующему типу ингредиентов
-    const handleTabChange = (type) => {
-        setCurrentTab(type);
+    useEffect(() => {
+        const handleIntersection = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const type = entry.target.getAttribute('data-type');
+                    const index = typeNames.indexOf(type);
+                    setCurrentTab(index);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, {
+            threshold: 0.5,
+        });
+
+        Object.values(listTitleRefs.current).forEach((ref) => {
+            observer.observe(ref);
+        });
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [typeNames]);
+
+    const handleTabChange = (index) => {
+        setCurrentTab(index);
+        if (listTitleRefs.current[typeNames[index]]) {
+            listTitleRefs.current[typeNames[index]].scrollIntoView({ behavior: 'smooth' });
+        }
     };
 
     return (
-        <div className={cn(styles.container, "custom-scroll")}>
-            <BurgerIngredientsTabs typeNames={typeNames} setCurrentTab={handleTabChange} />
+        <div className={cn(styles.container, "custom-scroll")} >
+            <BurgerIngredientsTabs typeNames={typeNames} currentTab={currentTab} onTabChange={handleTabChange} />
             {typeNames.map((type) => (
-                <div key={type}>
-                    <h2 ref={(ref) => (listTitleRefs.current[type] = ref)} className={cn("text text_type_main-medium")}>
+                <div key={type} data-type={type} ref={(ref) => (listTitleRefs.current[type] = ref)} >
+                    <h2 className={cn("text text_type_main-medium")}>
                         {typeToTitle[type] || type} 
                     </h2>
                     <ul className={cn(styles.ingredients__list, "custom-scroll")}>
