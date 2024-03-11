@@ -2,13 +2,13 @@ import styles from "./burger-constructor.module.css";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import cn from 'classnames';
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { selectorBurgerBuns, selectorOtherIngredients } from '../../services/selectors';
 import DraggableIngredient from "../draggable-ingredient/draggable-ingredient";
-import {  addBun, addIngredient } from '../../services/burgerConstuctorSlice';
+import {  addBun, addIngredient, clearBurger } from '../../services/burgerConstuctorSlice';
 import { useMemo } from "react";
 import { submitOrder } from '../../services/orderSlice';
 
@@ -33,8 +33,8 @@ export default function BurgerConstructor({ setModal }) {
   const dispatch = useDispatch();
   const burgerBuns = useSelector(selectorBurgerBuns);
   const otherIngredients = useSelector(selectorOtherIngredients);
-  const [isSubmitting, setIsSubmitting] = useState(false); // состояние для отключения кнопки во время загрузки
-
+  const [hasBun, setHasBun] = useState(false); // состояние, отслеживающее наличие булки в заказе
+  const [isLoading, setIsLoading] = useState(false); // состояние, отслеживающее процесс загрузки
 
   const [{ canDrop, isOver, itemDrag }, drop] = useDrop(() => ({
     accept: "INGREDIENT",
@@ -60,17 +60,36 @@ export default function BurgerConstructor({ setModal }) {
     return totalPrice;
   }, [burgerBuns, otherIngredients]);
 
+  // Обновление состояния hasBun, когда пользователь добавляет или удаляет булку из заказа
+  useEffect(() => {
+    setHasBun(burgerBuns.length > 0);
+  }, [burgerBuns]);
+
   const handleOrderSubmit = () => {
+    // Проверяем наличие булки в заказе перед оформлением заказа
+    if (!hasBun) {
+      alert('Пожалуйста, добавьте булку в заказ');
+      return;
+    }
+
+    setIsLoading(true); // Устанавливаем состояние загрузки при начале отправки запроса
+
     // Создаем массив _id всех ингредиентов
     const ingredientIds = [...burgerBuns.map(bun => bun._id), ...otherIngredients.map(ingredient => ingredient._id)];
     // Отправляем запрос к API с использованием action creator submitOrder
-    setIsSubmitting(true); // устанавливаем состояние в true при начале загрузки
     dispatch(submitOrder({ ingredients: ingredientIds }))
-      .then(() => setModal(true)) // устанавливаем показ модального окна с номером заказа
-      .then(() => setIsSubmitting(false)) // устанавливаем состояние в false после завершения запроса
-      .catch(() => setIsSubmitting(false)); // в случае ошибки также устанавливаем состояние в false
+      .then(() => {
+        setModal(true); // устанавливаем показ модального окна с номером заказа
+        // Очищаем состояния, связанные с выбранными ингредиентами
+        dispatch(clearBurger());
+      })
+      .catch(() =>
+        alert('Произошла ошибка при оформлении заказа.')
+      )
+      .finally(() => {
+        setIsLoading(false); // Устанавливаем состояние загрузки в false после получения ответа
+      });
   };
-
 
   return (
     <div ref={drop}>
@@ -144,17 +163,16 @@ export default function BurgerConstructor({ setModal }) {
         <div className={cn(styles.price)}>
           <p className={cn('text text_type_digits-medium')}>{totalPrice}</p>
           <CurrencyIcon type="primary" />
+            <Button
+              htmlType="button"
+              type="primary"
+              size="large"
+              onClick={handleOrderSubmit}
+              disabled={isLoading || !hasBun}
+            >
+              {isLoading ? "Отправка заказа..." : "Оформить заказ"}
+            </Button>
         </div>
-        <Button
-          htmlType="button"
-          type="primary"
-          size="large"
-          // onClick={() => setModal(true)}
-          onClick={handleOrderSubmit}
-          disabled={isSubmitting} // используем состояние для отключения кнопки во время загрузки
-          >
-          Оформить заказ
-        </Button>
       </div>
     </div>
   );
