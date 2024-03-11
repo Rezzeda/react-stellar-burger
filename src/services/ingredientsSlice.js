@@ -14,12 +14,8 @@ const initialState = {
 export const fetchIngredients = createAsyncThunk(
   `${sliceName}/fetchIngredients`,
   async () => {
-    try {
-      const res = await getIngredients();
-      return res.data;
-    } catch (error) {
-      throw error;
-    }
+    const res = await getIngredients();
+    return res.data;
   }
 );
 
@@ -43,5 +39,6 @@ export const ingredientsSlice = createSlice({
       });
   },
 });
+
 export const { setCurrentTab, addIngredient, removeIngredient } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

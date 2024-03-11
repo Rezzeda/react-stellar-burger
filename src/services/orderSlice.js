@@ -15,11 +15,20 @@ export const orderSlice = createSlice({
     initialState,
     reducers: {
         setOrderNumber(state, action) {
-        state.orderNumber = action.payload;
+            state.orderNumber = action.payload;
         },
         setError(state, action) {
             state.error = action.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(submitOrder.fulfilled, (state, action) => {
+            state.error = null;
+            state.orderNumber = action.payload.order.number;
+        });
+        builder.addCase(submitOrder.rejected, (state, action) => {
+            state.error = action.payload || 'Произошла ошибка при соединении с сервером';
+        });
     },
 });
 
@@ -27,17 +36,12 @@ export const { setOrderNumber, setError } = orderSlice.actions;
 
 export const submitOrder = createAsyncThunk(
     `${sliceName}/submitOrder`,
-    async (ingredients, { dispatch }) => {
-        try {
+    async (ingredients) => {
         const response = await postOrder(ingredients);
         if (response.success) {
-            dispatch(setOrderNumber(response.order.number));
-            dispatch(setError(null));
+            return response;
         } else {
-            dispatch(setError('Ошибка при оформлении заказа'));
-        }
-        } catch (error) {
-        dispatch(setError('Произошла ошибка при соединении с сервером'));
+            throw response.message || 'Ошибка при оформлении заказа';
         }
     }
 );
