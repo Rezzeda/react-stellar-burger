@@ -38,11 +38,7 @@ export const submitOrder = createAsyncThunk(
     `${sliceName}/submitOrder`,
     async (ingredients) => {
         const response = await postOrder(ingredients);
-        if (response.success) {
-            return response;
-        } else {
-            throw response.message || 'Ошибка при оформлении заказа';
-        }
+        return response;
     }
 );
 
