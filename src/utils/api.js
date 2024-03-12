@@ -1,18 +1,45 @@
-const configApi = {
-    baseUrl: 'https://norma.nomoreparties.space/api',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-}
+// 1 раз объявляем базовый урл
+export const BASE_URL = "https://norma.nomoreparties.space/api/";
 
-function onResponse(res) {
-    return res.ok ? res.json() : res.json().then((error) =>  Promise.reject(`Ошибка: ${error}`))
+// создаем функцию проверки ответа на `ok`
+const checkResponse = (res) => {
+    if (res.ok) {
+        return res.json();
+    }
+    // не забываем выкидывать ошибку, чтобы она попала в `catch`
+    return Promise.reject(`Ошибка ${res.status}`);
 };
 
+// создаем функцию проверки на `success`
+const checkSuccess = (res) => {
+    if (res && res.success) {
+        return res;
+    }
+    // не забываем выкидывать ошибку, чтобы она попала в `catch`
+    return Promise.reject(`Ответ не success: ${res}`);
+};
+
+// создаем универсальную фукнцию запроса с проверкой ответа и `success`
+// В вызов приходит `endpoint`(часть урла, которая идет после базового) и опции
+const request = (endpoint, options) => {
+  // а также в ней базовый урл сразу прописывается, чтобы не дублировать в каждом запросе
+    return fetch(`${BASE_URL}${endpoint}`, options)
+        .then(checkResponse)
+        .then(checkSuccess);
+};
+
+// В get-запросах даже не нужно указывать 2й параметр. 
+//Он получится undefined, что без проблем для fetch (который внутри).
+
 //Загрузка ингредиентов
-export const getIngredients = () => {
-    return fetch(`${configApi.baseUrl}/ingredients`, {
-        headers: configApi.headers
-    })
-    .then(onResponse);
-}
+export const getIngredients =  () => request("ingredients");
+//Размещение заказа
+export const postOrder = (data) => {
+    return request("orders", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+};

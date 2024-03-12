@@ -7,7 +7,7 @@ import cn from "classnames";
 import PropTypes from 'prop-types';
 
 
-export default function Modal({ isVisible = false, title, children, onClose, style }) {
+export default function Modal({ title, children, onClose, style }) {
     const modals = document.getElementById('modals');
 
     useEffect(() => {
@@ -17,17 +17,11 @@ export default function Modal({ isVisible = false, title, children, onClose, sty
             }
         };
 
-        if (isVisible) {
-            document.addEventListener('keydown', keydownHandler);
-            return () => {
-                document.removeEventListener('keydown', keydownHandler);
-            };
-        }
-    }, [isVisible, onClose]);
-
-    if (!isVisible) {
-        return null;
-    }
+        document.addEventListener('keydown', keydownHandler);
+        return () => {
+            document.removeEventListener('keydown', keydownHandler);
+        };
+    }, [onClose]);
 
     return createPortal(
         <div className={cn(styles.modal)}>
@@ -46,7 +40,6 @@ export default function Modal({ isVisible = false, title, children, onClose, sty
 }
 
 Modal.propTypes = {
-    isVisible: PropTypes.bool,
     title: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
     onClose: PropTypes.func.isRequired,

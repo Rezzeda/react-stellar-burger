@@ -2,59 +2,81 @@ import styles from "./burger-ingredients.module.css";
 import BurgerIngredientsTabs from "../burger-ingredients-tabs/burger-ingredients-tabs";
 import Category from "../category/category";
 import cn from "classnames";
-import PropTypes from 'prop-types';
+import { fetchIngredients } from "../../services/ingredientsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState, useRef } from "react";
+import { selectorAllIngredients } from "../../services/selectors";
+import { typeToTitle } from "../../utils/constants";
+
+export default function BurgerIngredients({ setModal }) {
+    const dispatch = useDispatch();
+    const ingredients = useSelector(selectorAllIngredients)
+    const listTitleRefs = useRef({});
+    const [currentTab, setCurrentTab] = useState(0); // Состояние для хранения текущей вкладки
 
 
-export default function BurgerIngredients(props) {
-    // console.log(props);
-    const { ingredients, setModal} = props;
-//   console.log(ingredients);
+    useEffect(() => {
+        dispatch(fetchIngredients());
+    }, []);
 
-  //возвращаем ключи типов ингредиентов
-    const typeNames = Object.keys(ingredients).map((key) => {
-    return key;
-    });
+    const ingredientTypes = ingredients ? ingredients.reduce((result, ingredient) => {
+        if (!result[ingredient.type]) {
+            result[ingredient.type] = [];
+        }
+        result[ingredient.type].push(ingredient);
+        return result;
+    }, {}) : {};
+
+    const typeNames = Object.keys(ingredientTypes);
+
+    useEffect(() => {
+        const handleIntersection = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const type = entry.target.getAttribute('data-type');
+                    const index = typeNames.indexOf(type);
+                    setCurrentTab(index);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, {
+            threshold: 0.5,
+        });
+
+        Object.values(listTitleRefs.current).forEach((ref) => {
+            observer.observe(ref);
+        });
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [typeNames]);
+
+    const handleTabChange = (index) => {
+        setCurrentTab(index);
+        if (listTitleRefs.current[typeNames[index]]) {
+            listTitleRefs.current[typeNames[index]].scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
     return (
-    <>
-        <BurgerIngredientsTabs typeNames={typeNames} />
-        <div className={cn(styles.container, "custom-scroll")}>
-            {/* Выводим список ингредиентов для каждой категории */}
+        <div className={cn(styles.container, "custom-scroll")} >
+            <BurgerIngredientsTabs typeNames={typeNames} currentTab={currentTab} onTabChange={handleTabChange} />
             {typeNames.map((type) => (
-                <div key={type}>
-                    <h2 className={cn("text text_type_main-medium")}>{type}</h2>
+                <div key={type} data-type={type} ref={(ref) => (listTitleRefs.current[type] = ref)} >
+                    <h2 className={cn("text text_type_main-medium")}>
+                        {typeToTitle[type] || type} 
+                    </h2>
                     <ul className={cn(styles.ingredients__list, "custom-scroll")}>
-                        {/* Выводим ингредиенты для текущей категории */}
-                        {ingredients[type].map((ingredient) => (
+                        {ingredientTypes[type].map(ingredient => (
                             <li key={ingredient._id} className={cn(styles.category, 'mb-10')}>
-                                <Category 
-                                image={ingredient.image} 
-                                price={ingredient.price} 
-                                name={ingredient.name}
-                                // _id={ingredient._id}
-                                // onClick={() => setModal(true)}
-                                onClick={() => setModal({ ...ingredient, showModal: true })}
-                                />
+                                <Category {...ingredient} onClick={() => setModal({ ...ingredient, showModal: true })} />
                             </li>
                         ))}
                     </ul>
                 </div>
             ))}
         </div>
-    </>
     );
 }
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.objectOf(
-        PropTypes.arrayOf(
-        PropTypes.shape({
-            _id: PropTypes.string.isRequired,
-            image: PropTypes.string.isRequired,
-            price: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-        })
-        )
-    ).isRequired,
-    setModal: PropTypes.func.isRequired,
-};
