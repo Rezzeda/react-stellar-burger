@@ -2,22 +2,15 @@ import styles from "./burger-ingredients.module.css";
 import BurgerIngredientsTabs from "../burger-ingredients-tabs/burger-ingredients-tabs";
 import Category from "../category/category";
 import cn from "classnames";
-import { fetchIngredients } from "../../services/ingredientsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
 import { selectorAllIngredients } from "../../services/selectors";
 import { typeToTitle } from "../../utils/constants";
 
 export default function BurgerIngredients({ setModal }) {
-    const dispatch = useDispatch();
-    const ingredients = useSelector(selectorAllIngredients)
+    const ingredients = useSelector(selectorAllIngredients);
     const listTitleRefs = useRef({});
     const [currentTab, setCurrentTab] = useState(0); // Состояние для хранения текущей вкладки
-
-
-    useEffect(() => {
-        dispatch(fetchIngredients());
-    }, []);
 
     const ingredientTypes = ingredients ? ingredients.reduce((result, ingredient) => {
         if (!result[ingredient.type]) {

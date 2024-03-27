@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 
 export default function Modal({ title, children, onClose, style }) {
+
     const modals = document.getElementById('modals');
 
     useEffect(() => {

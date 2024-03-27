@@ -2,6 +2,7 @@ import { ingredientsSlice } from "./ingredientsSlice";
 import { burgerConstructorSlice } from "./burgerConstuctorSlice";
 import { orderSlice } from "./orderSlice";
 import { createSelector } from "reselect";
+import { userSlice } from "./userSlice";
 
 export const selectorIngredients = store => store[ingredientsSlice.name];
 export const selectorAllIngredients = store => store[ingredientsSlice.name].allIngredients;
@@ -43,3 +44,8 @@ export const selectorIngredientCounts = createSelector(
 );
 
 export const selectorOrderNumber = store => store[orderSlice.name].orderNumber;
+
+export const getIsAuthChecked = createSelector(
+    (store) => store[userSlice.name].IsAuthChecked,
+    (isAuthChecked) => isAuthChecked
+);
