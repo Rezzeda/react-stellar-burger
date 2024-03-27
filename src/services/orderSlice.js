@@ -27,7 +27,7 @@ export const orderSlice = createSlice({
             state.orderNumber = action.payload.order.number;
         });
         builder.addCase(submitOrder.rejected, (state, action) => {
-            state.error = action.payload || 'Произошла ошибка при соединении с сервером';
+            state.error = action.payload || 'Ошибка при соединении с сервером';
         });
     },
 });
@@ -35,7 +35,7 @@ export const orderSlice = createSlice({
 export const { setOrderNumber, setError } = orderSlice.actions;
 
 export const submitOrder = createAsyncThunk(
-    `${sliceName}/submitOrder`,
+    `${sliceName}/submitOrder`, 
     async (ingredients) => {
         const response = await postOrder(ingredients);
         return response;

@@ -4,7 +4,6 @@ import doneIcon from '../../images/done.svg'
 import { useSelector } from 'react-redux';
 import { selectorOrderNumber } from "../../services/selectors";
 
-
 export default function OrderDetails() {
     const orderNumber = useSelector(selectorOrderNumber);
 

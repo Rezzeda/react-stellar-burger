@@ -1,0 +1,25 @@
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.email_input {
+    margin-bottom: 8px;
+}
+
+.password_input {
+    margin-bottom: 8px;
+}
+
+.name_input {
+    margin-bottom: 8px;
+}
+
+.button {
+    max-width: 128px;
+    align-self: center;
+    margin-bottom: 56px;
+}
