@@ -4,7 +4,6 @@ import BurgerConstructor from '../../components/burger-constructor/burger-constr
 import styles from './home.module.css';
 import cn from "classnames";
 
-
 export default function HomePage({ setIngredientDetailsModal, setOrderDetailsModal} ) {
     return (
         <main className={styles.content}>

@@ -2,8 +2,6 @@ import cn from "classnames";
 import styles from "./not-found.module.css";
 import { Link } from 'react-router-dom';
 
-
-
 export default function NotFoundPage() {
     return (
         <section className={styles.container}>

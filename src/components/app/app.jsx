@@ -24,8 +24,8 @@ import { fetchIngredients } from "../../services/ingredientsSlice";
 export default function App() {
   const dispatch = useDispatch();
   const location = useLocation();
-  let navigate = useNavigate();
-  let state = location.state;
+  const navigate = useNavigate();
+  const state = location.state;
   const [orderDetailsModal, setOrderDetailsModal] = useState(false);
   const [ingredientDetailsModal, setIngredientDetailsModal] = useState(null);
 

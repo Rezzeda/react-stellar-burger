@@ -4,14 +4,20 @@ import { useDispatch } from "react-redux";
 import { resetPasswords } from '../../services/userSlice';
 import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate, useLocation } from 'react-router-dom';
+import { useForm } from '../../hooks/useForm';
 
 
 export default function ResetPasswordPage() {
-    const [form, setFormValues] = useState({ password: "", token: "" });
     const [redirectToResetPassword, setRedirectToResetPassword] = useState(false);
     const location = useLocation();
     const [redirectToForgotPassword, setRedirectToForgotPassword] = useState(false);
     const dispatch = useDispatch();
+
+     // Используем кастомный хук useForm
+    const { values, handleChange } = useForm({
+        password: "",
+        token: "",
+    });
 
     useEffect(() => {
         if (!location.state?.fromForgotPassword) {
@@ -23,13 +29,9 @@ export default function ResetPasswordPage() {
         return <Navigate to="/forgot-password" />;
     }
 
-    const handleChange = (e) => {
-        setFormValues({ ...form, [e.target.name]: e.target.value });
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(resetPasswords(form));
+        dispatch(resetPasswords(values));
         setRedirectToResetPassword(true);
     };
 
@@ -42,7 +44,7 @@ export default function ResetPasswordPage() {
         <h2 className="text text_type_main-medium mb-6">Восстановление пароля</h2>
         <form className={styles.form} onSubmit={handleSubmit}>
             <PasswordInput
-                value={form.password}
+                value={values.password}
                 name={"password"}
                 size={"default"}
                 onChange={handleChange}
@@ -51,7 +53,7 @@ export default function ResetPasswordPage() {
             <Input
                 type="text"
                 placeholder="Введите код из письма"
-                value={form.token}
+                value={values.token}
                 name={"token"}
                 onChange={handleChange}
                 error={false}
