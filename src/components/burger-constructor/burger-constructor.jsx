@@ -6,11 +6,12 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
-import { selectorBurgerBuns, selectorOtherIngredients } from '../../services/selectors';
+import { selectorBurgerBuns, selectorOtherIngredients, getIsAuthChecked, selectorUser } from '../../services/selectors';
 import DraggableIngredient from "../draggable-ingredient/draggable-ingredient";
 import {  addBun, addIngredient, clearBurger } from '../../services/burgerConstuctorSlice';
 import { useMemo } from "react";
 import { submitOrder } from '../../services/orderSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 // Плейсхолдерные данные для bun
@@ -31,6 +32,7 @@ const placeholderIngredient = {
 
 export default function BurgerConstructor({ setModal }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const burgerBuns = useSelector(selectorBurgerBuns);
   const otherIngredients = useSelector(selectorOtherIngredients);
   const [hasBun, setHasBun] = useState(false); // состояние, отслеживающее наличие булки в заказе
@@ -71,9 +73,7 @@ export default function BurgerConstructor({ setModal }) {
       alert('Пожалуйста, добавьте булку в заказ');
       return;
     }
-
     setIsLoading(true); // Устанавливаем состояние загрузки при начале отправки запроса
-
     // Создаем массив _id всех ингредиентов
     const ingredientIds = [...burgerBuns.map(bun => bun._id), ...otherIngredients.map(ingredient => ingredient._id)];
     // Отправляем запрос к API с использованием action creator submitOrder
@@ -89,6 +89,27 @@ export default function BurgerConstructor({ setModal }) {
       .finally(() => {
         setIsLoading(false); // Устанавливаем состояние загрузки в false после получения ответа
       });
+  };
+
+  const handleOrderClick = () => {
+    if (!hasBun) {
+      alert('Пожалуйста, добавьте булку в заказ');
+      return;
+    }
+    if (!isUserAuthenticated()) {
+      navigate('/login', { state: { fromOrder: true } });
+    } else {
+      handleOrderSubmit();
+    }
+  };
+
+  const user = useSelector(selectorUser);
+  const isUserAuthenticated = () => {
+    // проверка аутентификации пользователя, (!!) приводит объект user к логическому значению, 
+    // преобразуя его в true, если user не является null или undefined, 
+    // и в false, если user - пустой объект или null/undefined 
+    // (то есть информация о пользователе доступна в состоянии), функция вернет true, иначе false.
+    return !!user;
   };
 
   return (
@@ -167,8 +188,8 @@ export default function BurgerConstructor({ setModal }) {
               htmlType="button"
               type="primary"
               size="large"
-              onClick={handleOrderSubmit}
-              disabled={isLoading || !hasBun}
+              onClick={handleOrderClick}
+              disabled={!hasBun || isLoading}
             >
               {isLoading ? "Отправка заказа..." : "Оформить заказ"}
             </Button>

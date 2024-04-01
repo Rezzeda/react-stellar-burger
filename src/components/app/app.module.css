@@ -9,16 +9,3 @@
   justify-content: center;
   width: 100%;
 }
-
-.content {
-  display: flex;
-  flex-direction: row;
-  column-gap: 40px;
-  margin: 0 auto;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-}
-

@@ -1,45 +1,121 @@
 import styles from "./app.module.css";
 import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import {  useState } from "react";
-import cn from "classnames";
-import OrderDetails from "../order-details/order-details";
+import { useState, useEffect } from "react";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import NotFoundPage from "../../pages/not-found/not-found";
+import LoginPage from "../../pages/login/login";
+import { useDispatch } from "react-redux";
+import HomePage from "../../pages/home/home";
+import RegisterPage from "../../pages/register/register";
+import ForgotPasswordPage from "../../pages/forgot-password/forgot-password";
+import ResetPasswordPage from "../../pages/reset-password/reset-password";
+import ProfilePage from "../../pages/profile/profile";
+import IngredientPage from "../../pages/ingredient/ingredient";
+import { getRegisterUser, getLoginUser } from "../../utils/api";
+import { checkUserAuth } from "../../services/userSlice";
+import ProtectedRoute from "../protected-route/protected-route";
+import { fetchIngredients } from "../../services/ingredientsSlice";
 
 export default function App() {
-  
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const state = location.state;
   const [orderDetailsModal, setOrderDetailsModal] = useState(false);
   const [ingredientDetailsModal, setIngredientDetailsModal] = useState(null);
 
+  useEffect(() => {
+    dispatch(fetchIngredients());
+}, [dispatch]);
+
+  const closeModal = () => {
+    navigate(-1);
+  };
+
+  const clbLogin = (dataUser) => {
+    dispatch(getLoginUser(dataUser));
+  };
+
+  const clbRegister = (dataUser) => {
+    dispatch(getRegisterUser(dataUser));
+  };
+
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, [dispatch]);
+  
   return (
     <div className={styles.app}>
       <AppHeader />
       <DndProvider backend={HTML5Backend}>
       <main className={styles.content}>
-        <div className={styles.container}>
-          <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
-          <BurgerIngredients setModal={setIngredientDetailsModal}/>
-        </div>
-        <div className={cn(styles.container, 'mt-25')}>
-          <BurgerConstructor setModal={setOrderDetailsModal} />
-        </div>
+        <Routes 
+          location={ state && state.backgroundLocation 
+          ? state.backgroundLocation
+          : location}>
+            <Route path="/" element={<HomePage setIngredientDetailsModal={setIngredientDetailsModal} setOrderDetailsModal={setOrderDetailsModal} />} />
+            <Route path="*" element={<NotFoundPage />} />
+            <Route path="/login" element={
+              <ProtectedRoute onlyUnAuth>
+                  <LoginPage onLogin={clbLogin} />
+              </ProtectedRoute>
+            }
+            />
+            <Route path="/register" element={
+              <ProtectedRoute onlyUnAuth>
+                <RegisterPage onRegister={clbRegister} />
+              </ProtectedRoute>
+            }
+            />
+            <Route path="/forgot-password" element={
+              <ProtectedRoute onlyUnAuth>
+                <ForgotPasswordPage />
+              </ProtectedRoute>
+            }
+            />
+            <Route path="/reset-password" element={
+              <ProtectedRoute onlyUnAuth>
+                <ResetPasswordPage />
+              </ProtectedRoute>
+            }
+            />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+            />
+            <Route path="/ingredients/:id" element={<IngredientPage />} />
+        </Routes>
       </main>
       </DndProvider>
+      {state?.backgroundLocation && (
+          <Routes>
+            <Route
+              path="/ingredients/:id"
+              element={
+                <Modal onClose={closeModal} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
       {orderDetailsModal && (
-        <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", height: "718px" }}
-        >
-          <OrderDetails />
+      <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", height: "718px" }}>
+        <OrderDetails />
         </Modal>
-      )}
-      {ingredientDetailsModal && (
+    )}
+      {/* {ingredientDetailsModal && (
         <Modal onClose={() => setIngredientDetailsModal(null)} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
-          <IngredientDetails selectedIngredient={ingredientDetailsModal} />
+        <IngredientDetails selectedIngredient={ingredientDetailsModal} />
         </Modal>
-      )}
+    )} */}
     </div>
   );
 }
