@@ -22,7 +22,11 @@ export default function AppHeader() {
                     </li>
                 </ul>
             </nav>
-            <div className={styles.logo}><Logo /></div>
+            <div className={styles.logo}>
+                <NavLink className={styles.link} to="/">
+                    <Logo />
+                </NavLink>
+            </div>
             <div>
                 <NavLink className={styles.link} to="/profile">
                     <ProfileIcon type="secondary" />

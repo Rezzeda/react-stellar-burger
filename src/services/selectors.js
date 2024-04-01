@@ -49,3 +49,5 @@ export const getIsAuthChecked = createSelector(
     (store) => store[userSlice.name].IsAuthChecked,
     (isAuthChecked) => isAuthChecked
 );
+
+export const selectorUser = store => store[userSlice.name].data;
