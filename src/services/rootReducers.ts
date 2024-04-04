@@ -4,10 +4,11 @@ import burgerConstructorReducer, {burgerConstructorSlice} from "./burgerConstuct
 import orderSliceReducer, {orderSlice} from "./orderSlice";
 import userSliceReducer, {userSlice} from "./userSlice";
 
-
 export const rootReducer = combineReducers({
     [ingredientsSlice.name]: ingredientsReducer,
     [burgerConstructorSlice.name]: burgerConstructorReducer,
     [orderSlice.name]: orderSliceReducer,
     [userSlice.name]: userSliceReducer,
 })
+
+export type RootState = ReturnType<typeof rootReducer>;

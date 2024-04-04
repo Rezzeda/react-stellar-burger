@@ -2,11 +2,16 @@ import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burg
 import { Link } from "react-router-dom";
 import styles from "./login.module.css"
 import { useDispatch, } from "react-redux";
-// import { useState } from "react";
 import { loginUser } from "../../services/userSlice";
 import { useForm } from "../../hooks/useForm";
+import React from "react";
 
-export default function LoginPage() {
+interface ILoginProps {
+    onLogin: (data: { email: string; password: string }) => void;
+}
+
+export default function LoginPage({ onLogin }: ILoginProps) {
+
     const dispatch = useDispatch();
 
     // Используем кастомный хук useForm
@@ -15,9 +20,10 @@ export default function LoginPage() {
         password: "",
     });
 
-    const handleSubmit = (e) => {
+        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(loginUser(values)); //Отправляем данные из кастомного хука
+        onLogin (values)
     };
 
     return (

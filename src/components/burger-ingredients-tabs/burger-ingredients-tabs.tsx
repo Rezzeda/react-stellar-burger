@@ -1,12 +1,15 @@
 import styles from "./burger-ingredients-tabs.module.css";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import cn from "classnames";
-import PropTypes from 'prop-types';
 import { typeToTitle } from "../../utils/constants";
 
+interface IBurgerIngredientsTabs {
+    typeNames: string[];
+    currentTab: number;
+    onTabChange: (index: number) => void;
+};
 
-export default function BurgerIngredientsTabs({ typeNames, currentTab, onTabChange }) {
-    
+export const BurgerIngredientsTabs: React.FC<IBurgerIngredientsTabs> = ({ typeNames, currentTab, onTabChange }) => {
     return (
         <div className={cn(styles.tabs, 'mb-10')}>
             {typeNames.map((type, index) => (
@@ -23,8 +26,4 @@ export default function BurgerIngredientsTabs({ typeNames, currentTab, onTabChan
     );
 };
 
-BurgerIngredientsTabs.propTypes = {
-    typeNames: PropTypes.arrayOf(PropTypes.string).isRequired,
-    currentTab: PropTypes.number.isRequired,
-    onTabChange: PropTypes.func.isRequired,
-};
+export default BurgerIngredientsTabs;

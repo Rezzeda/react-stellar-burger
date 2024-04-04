@@ -16,10 +16,11 @@ import ForgotPasswordPage from "../../pages/forgot-password/forgot-password";
 import ResetPasswordPage from "../../pages/reset-password/reset-password";
 import ProfilePage from "../../pages/profile/profile";
 import IngredientPage from "../../pages/ingredient/ingredient";
-import { getRegisterUser, getLoginUser } from "../../utils/api";
 import { checkUserAuth } from "../../services/userSlice";
 import ProtectedRoute from "../protected-route/protected-route";
 import { fetchIngredients } from "../../services/ingredientsSlice";
+import { loginUser, registerUser } from "../../services/userSlice";
+
 
 export default function App() {
   const dispatch = useDispatch();
@@ -37,12 +38,12 @@ export default function App() {
     navigate(-1);
   };
 
-  const clbLogin = (dataUser) => {
-    dispatch(getLoginUser(dataUser));
+  const clbLogin = (dataUser: { email: string; password: string }) => {
+    dispatch(loginUser(dataUser));
   };
 
-  const clbRegister = (dataUser) => {
-    dispatch(getRegisterUser(dataUser));
+  const clbRegister = (dataUser: {name: string; email: string;  password: string;}) => {
+    dispatch(registerUser(dataUser));
   };
 
   useEffect(() => {

@@ -1,10 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getIngredients } from "../utils/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { IngredientType } from "../utils/types";
 
 const sliceName = "ingredients"
 
-const initialState = {
+interface IIngredientsState {
+  allIngredients: IngredientType[];
+  loading: boolean;
+  error: string | null;
+  currentTab: string | null;
+}
+
+const initialState: IIngredientsState = {
   allIngredients: [],
   loading: false, // Флаг для отслеживания состояния загрузки
   error: null, // Переменная для хранения ошибки, если она произойдет во время загрузки
@@ -35,10 +43,9 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.error.message || null;
       });
   },
 });
 
-export const { setCurrentTab, addIngredient, removeIngredient } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

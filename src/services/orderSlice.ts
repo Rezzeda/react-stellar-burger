@@ -2,10 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { postOrder } from "../utils/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
 const sliceName = "order"
 
-const initialState = {
+interface IOrderState {
+    orderNumber: number | null;
+    error: string | null;
+}
+
+const initialState: IOrderState = {
     orderNumber: null,
     error: null,
 };
@@ -27,7 +31,7 @@ export const orderSlice = createSlice({
             state.orderNumber = action.payload.order.number;
         });
         builder.addCase(submitOrder.rejected, (state, action) => {
-            state.error = action.payload || 'Ошибка при соединении с сервером';
+            state.error = action.error.message || null;
         });
     },
 });
@@ -36,8 +40,8 @@ export const { setOrderNumber, setError } = orderSlice.actions;
 
 export const submitOrder = createAsyncThunk(
     `${sliceName}/submitOrder`, 
-    async (ingredients) => {
-        const response = await postOrder(ingredients);
+    async (ingredientIds: string[]) => {
+        const response = await postOrder({ ingredients: ingredientIds }); // Передаем объект с ключом "ingredients"
         return response;
     }
 );

@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 import { useLocation, Navigate } from "react-router-dom";
-import { getIsAuthChecked } from "../../services/selectors";
-import PropTypes from "prop-types";
+import { getIsAuthChecked, selectorUser } from "../../services/selectors";
 import Loader from "../loader/loader";
+import { ReactNode } from "react";
 
-export default function ProtectedRoute({ children, onlyUnAuth }) {
+interface IProtectedRouteProps {
+    children: ReactNode;
+    onlyUnAuth?: boolean;
+}
+
+export default function ProtectedRoute({ children, onlyUnAuth }: IProtectedRouteProps) {
     const location = useLocation();
-    const user = useSelector((state) => state.user.data);
+    const user = useSelector(selectorUser);
     const isAuthChecked = useSelector(getIsAuthChecked);
 
     if (!isAuthChecked) {
@@ -29,10 +34,5 @@ export default function ProtectedRoute({ children, onlyUnAuth }) {
     }
 
     console.log("render children");
-    return children;
+    return <>{children}</>
 }
-
-ProtectedRoute.propTypes = {
-    children: PropTypes.node.isRequired,
-    onlyUnAuth: PropTypes.bool,
-};

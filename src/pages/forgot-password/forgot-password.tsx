@@ -15,9 +15,9 @@ export default function ForgotPasswordPage() {
         email: ""
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        dispatch(forgotPasswords(values.email)); //Отправляем данные из вашего кастомного хука
+        dispatch(forgotPasswords(values.email)); //Отправляем данные кастомного хука
         navigate("/reset-password", { state: { fromForgotPassword: true } });
     };
 

@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
         return <Navigate to="/forgot-password" />;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(resetPasswords(values));
         setRedirectToResetPassword(true);

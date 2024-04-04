@@ -3,18 +3,19 @@ import { burgerConstructorSlice } from "./burgerConstuctorSlice";
 import { orderSlice } from "./orderSlice";
 import { createSelector } from "reselect";
 import { userSlice } from "./userSlice";
+import { RootState } from "./rootReducers";
 
-export const selectorIngredients = store => store[ingredientsSlice.name];
-export const selectorAllIngredients = store => store[ingredientsSlice.name].allIngredients;
+export const selectorIngredients = (store: RootState) => store[ingredientsSlice.name];
+export const selectorAllIngredients = (store: RootState ) => store[ingredientsSlice.name].allIngredients;
 
-export const selectorBurgerBuns = store => store[burgerConstructorSlice.name].burgerBuns;
-export const selectorOtherIngredients = store => store[burgerConstructorSlice.name].otherIngredients;
+export const selectorBurgerBuns = (store: RootState ) => store[burgerConstructorSlice.name].burgerBuns;
+export const selectorOtherIngredients = (store: RootState ) => store[burgerConstructorSlice.name].otherIngredients;
 
 export const selectorIngredientCounts = createSelector(
     [selectorOtherIngredients, selectorBurgerBuns],
     (otherIngredients, burgerBuns) => {
-        const ingredientCounts = {};
-        
+        const ingredientCounts: { [key: string]: { id: string, _id: string, count: number }[] } = {};
+
         // Подсчет уникальных ингредиентов из otherIngredients
         otherIngredients.forEach((ingredient) => {
             const { _id, id } = ingredient;
@@ -43,11 +44,11 @@ export const selectorIngredientCounts = createSelector(
     }
 );
 
-export const selectorOrderNumber = store => store[orderSlice.name].orderNumber;
+export const selectorOrderNumber = (store: RootState ) => store[orderSlice.name].orderNumber;
 
 export const getIsAuthChecked = createSelector(
-    (store) => store[userSlice.name].IsAuthChecked,
+    (store: RootState) => store[userSlice.name].IsAuthChecked,
     (isAuthChecked) => isAuthChecked
 );
 
-export const selectorUser = store => store[userSlice.name].data;
+export const selectorUser = (store: RootState ) => store[userSlice.name].data;

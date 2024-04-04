@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import Loader from "../loader/loader";
 
 const IngredientDetails = () => {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const ingredientss = useSelector(selectorAllIngredients);
     const selectedIngredient = ingredientss.find((item) => item._id === id);
 
