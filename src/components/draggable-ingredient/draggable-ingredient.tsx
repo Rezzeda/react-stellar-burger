@@ -3,7 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { reorderIngredient, removeIngredient } from '../../services/burgerConstuctorSlice';
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/appHooks";
 import { IngredientType } from '../../utils/types';
 
 interface IDraggableIngredientProps {
@@ -15,7 +15,7 @@ const DraggableIngredient: React.FC<IDraggableIngredientProps> = ({ ingredient, 
 
     const id = ingredient.id;
     const ref = useRef<HTMLDivElement>(null);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const [{ isDragging }, drag] = useDrag({
         type: "CONSTRUCTOR_ELEMENT",

@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/appHooks";
 import { useLocation, Navigate } from "react-router-dom";
 import { getIsAuthChecked, selectorUser } from "../../services/selectors";
 import Loader from "../loader/loader";
@@ -11,8 +11,8 @@ interface IProtectedRouteProps {
 
 export default function ProtectedRoute({ children, onlyUnAuth }: IProtectedRouteProps) {
     const location = useLocation();
-    const user = useSelector(selectorUser);
-    const isAuthChecked = useSelector(getIsAuthChecked);
+    const user = useAppSelector(selectorUser);
+    const isAuthChecked = useAppSelector(getIsAuthChecked);
 
     if (!isAuthChecked) {
         console.log("check authentication");

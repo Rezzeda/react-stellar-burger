@@ -9,7 +9,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import NotFoundPage from "../../pages/not-found/not-found";
 import LoginPage from "../../pages/login/login";
-import { useDispatch } from "react-redux";
 import HomePage from "../../pages/home/home";
 import RegisterPage from "../../pages/register/register";
 import ForgotPasswordPage from "../../pages/forgot-password/forgot-password";
@@ -20,10 +19,10 @@ import { checkUserAuth } from "../../services/userSlice";
 import ProtectedRoute from "../protected-route/protected-route";
 import { fetchIngredients } from "../../services/ingredientsSlice";
 import { loginUser, registerUser } from "../../services/userSlice";
-
+import { useAppDispatch } from "../../hooks/appHooks";
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state;

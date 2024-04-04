@@ -3,7 +3,7 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import cn from 'classnames';
 import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/appHooks";
 import { useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { selectorBurgerBuns, selectorOtherIngredients, selectorUser } from '../../services/selectors';
@@ -37,10 +37,10 @@ interface IBurgerConstructorProps {
 }
 
 const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const burgerBuns: IngredientType[] = useSelector(selectorBurgerBuns);
-  const otherIngredients: IngredientType[] = useSelector(selectorOtherIngredients);
+  const burgerBuns: IngredientType[] = useAppSelector(selectorBurgerBuns);
+  const otherIngredients: IngredientType[] = useAppSelector(selectorOtherIngredients);
   const [hasBun, setHasBun] = useState(false); // состояние, отслеживающее наличие булки в заказе
   const [isLoading, setIsLoading] = useState(false); // состояние, отслеживающее процесс загрузки
 
@@ -105,7 +105,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
     }
   };
 
-  const user = useSelector(selectorUser);
+  const user = useAppSelector(selectorUser);
   const isUserAuthenticated = () => {
     // проверка аутентификации пользователя, (!!) приводит объект user к логическому значению, 
     // преобразуя его в true, если user не является null или undefined, 

@@ -1,7 +1,7 @@
 import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import styles from "./login.module.css"
-import { useDispatch, } from "react-redux";
+import { useAppDispatch, } from "../../hooks/appHooks";
 import { loginUser } from "../../services/userSlice";
 import { useForm } from "../../hooks/useForm";
 import React from "react";
@@ -12,7 +12,7 @@ interface ILoginProps {
 
 export default function LoginPage({ onLogin }: ILoginProps) {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     // Используем кастомный хук useForm
     const { values, handleChange } = useForm({

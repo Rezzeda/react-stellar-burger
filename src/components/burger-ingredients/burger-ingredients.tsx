@@ -2,7 +2,7 @@ import styles from "./burger-ingredients.module.css";
 import BurgerIngredientsTabs from "../burger-ingredients-tabs/burger-ingredients-tabs";
 import Category from "../category/category";
 import cn from "classnames";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/appHooks";
 import { useEffect, useState, useRef } from "react";
 import { selectorAllIngredients } from "../../services/selectors";
 import { typeToTitle } from "../../utils/constants";
@@ -13,7 +13,7 @@ interface IBurgerIngredientsProps {
 };
 
 const BurgerIngredients: React.FC<IBurgerIngredientsProps> = ({ setModal }) => {
-    const ingredients = useSelector(selectorAllIngredients);
+    const ingredients = useAppSelector(selectorAllIngredients);
     const listTitleRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const [currentTab, setCurrentTab] = useState<number>(0);
 

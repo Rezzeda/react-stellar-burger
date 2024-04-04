@@ -3,7 +3,8 @@ import { burgerConstructorSlice } from "./burgerConstuctorSlice";
 import { orderSlice } from "./orderSlice";
 import { createSelector } from "reselect";
 import { userSlice } from "./userSlice";
-import { RootState } from "./rootReducers";
+import { RootState } from "./store";
+
 
 export const selectorIngredients = (store: RootState) => store[ingredientsSlice.name];
 export const selectorAllIngredients = (store: RootState ) => store[ingredientsSlice.name].allIngredients;

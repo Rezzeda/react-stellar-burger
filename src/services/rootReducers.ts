@@ -11,4 +11,4 @@ export const rootReducer = combineReducers({
     [userSlice.name]: userSliceReducer,
 })
 
-export type RootState = ReturnType<typeof rootReducer>;
+// export type RootState = ReturnType<typeof rootReducer>;

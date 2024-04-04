@@ -1,11 +1,11 @@
 import { NavLink} from "react-router-dom";
 import styles from "./profile.module.css";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/appHooks";
 import { logoutUsers } from "../../services/userSlice";
 import ProfileInfo from "../../components/profile-info/profile-info";
 
 export default function ProfilePage() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleLogout = () => {
         dispatch(logoutUsers());

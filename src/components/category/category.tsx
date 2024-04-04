@@ -3,7 +3,7 @@ import cn from "classnames";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
 import { selectorIngredientCounts } from '../../services/selectors';
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/appHooks";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -28,7 +28,7 @@ const Category: React.FC<ICategoryProps> = ({ image, price, name, type, _id, onC
         }),
     }));
 
-    const ingredientCounts = useSelector(selectorIngredientCounts);
+    const ingredientCounts = useAppSelector(selectorIngredientCounts);
     const ingredientArray = ingredientCounts[_id];
     const count = ingredientArray ? ingredientArray.reduce((acc, cur) => acc + cur.count, 0) : 0;
 

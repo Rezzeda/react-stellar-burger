@@ -1,12 +1,11 @@
-
 import styles from './profile-info.module.css'
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
 import { checkUserAuth, updateUserInfo } from '../../services/userSlice'
 import { useForm } from "../../hooks/useForm";
 import { selectorUser } from '../../services/selectors'
-import { RootState } from "../../services/rootReducers";
+import { useAppSelector, useAppDispatch } from '../../hooks/appHooks'
+
 
 type TUserData = {
     user: {
@@ -16,8 +15,8 @@ type TUserData = {
 } | null;
 
 export default function ProfileInfo() {
-    const dispatch = useDispatch();
-    const userData = useSelector<RootState, TUserData>(selectorUser);
+    const dispatch = useAppDispatch();
+    const userData = useAppSelector<TUserData>(selectorUser);
         const { values, handleChange, isFormChanged, setIsFormChanged, setValues } = useForm({
         name: userData?.user.name || "",
         email: userData?.user.email || "",

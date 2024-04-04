@@ -31,8 +31,12 @@ const request = (endpoint: string, options: RequestOptions): Promise<any> => {
 // Загрузка ингредиентов
 export const getIngredients = (): Promise<any> => request("ingredients", { method: "GET" });
 
+interface IOrderData {
+    ingredients: string[];
+}
+
 //Размещение заказа
-export const postOrder = (data: any): Promise<any> => {
+export const postOrder = (data: IOrderData): Promise<any> => {
     return request("orders", {
         method: "POST",
         headers: {
@@ -85,7 +89,7 @@ export const requestWithRefresh = async (endpoint: string, options: RequestOptio
     }
 };
 
-export const getRegisterUser = (data: any): Promise<any> => request("auth/register", {
+export const getRegisterUser = (data: { email: string; password: string; name: string }): Promise<any> => request("auth/register", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -93,7 +97,7 @@ export const getRegisterUser = (data: any): Promise<any> => request("auth/regist
     body: JSON.stringify(data),
 });
 
-export const getLoginUser = (data: any): Promise<any> => requestWithRefresh("auth/login", {
+export const getLoginUser = (data: { email: string; password: string }): Promise<any> => requestWithRefresh("auth/login", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -123,7 +127,7 @@ export const forgotPassword = (email: string): Promise<any> => request("password
     body: JSON.stringify({ email }),
 });
 
-export const resetPassword = (data: any): Promise<any> => request("password-reset/reset", {
+export const resetPassword = (data: { password: string; token: string }): Promise<any> => request("password-reset/reset", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -131,7 +135,7 @@ export const resetPassword = (data: any): Promise<any> => request("password-rese
     body: JSON.stringify(data),
 });
 
-export const updateProfile = (data: any): Promise<any> => {
+export const updateProfile = (data: { email: string; name: string; password: string }): Promise<any> => {
     const accessToken = getCookie("accessToken");
     if (!accessToken) {
         throw new Error("Токен не найден");
