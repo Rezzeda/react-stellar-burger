@@ -1,5 +1,5 @@
 import styles from './forgot-password.module.css'
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../hooks/appHooks';
 import { Input,  Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from 'react-router-dom';
 import { forgotPasswords } from '../../services/userSlice';
@@ -7,7 +7,7 @@ import { useForm } from '../../hooks/useForm';
 
 
 export default function ForgotPasswordPage() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     // Используем хук useForm
@@ -15,9 +15,9 @@ export default function ForgotPasswordPage() {
         email: ""
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        dispatch(forgotPasswords(values.email)); //Отправляем данные из вашего кастомного хука
+        dispatch(forgotPasswords(values.email)); //Отправляем данные кастомного хука
         navigate("/reset-password", { state: { fromForgotPassword: true } });
     };
 

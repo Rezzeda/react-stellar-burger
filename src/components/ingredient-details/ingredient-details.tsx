@@ -1,14 +1,14 @@
 import styles from "./ingredient-details.module.css";
 import cn from "classnames";
 import { selectorAllIngredients } from "../../services/selectors";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/appHooks";
 import { useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import Loader from "../loader/loader";
 
 const IngredientDetails = () => {
-    const { id } = useParams();
-    const ingredientss = useSelector(selectorAllIngredients);
+    const { id } = useParams<{ id: string }>();
+    const ingredientss = useAppSelector(selectorAllIngredients);
     const selectedIngredient = ingredientss.find((item) => item._id === id);
 
     useEffect(() => {}, [selectedIngredient, id]);

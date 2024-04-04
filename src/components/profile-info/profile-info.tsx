@@ -1,47 +1,54 @@
-
 import styles from './profile-info.module.css'
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useEffect } from 'react';
 import { checkUserAuth, updateUserInfo } from '../../services/userSlice'
+import { useForm } from "../../hooks/useForm";
+import { selectorUser } from '../../services/selectors'
+import { useAppSelector, useAppDispatch } from '../../hooks/appHooks'
+
+
+type TUserData = {
+    user: {
+        name: string;
+        email: string;
+    }
+} | null;
 
 export default function ProfileInfo() {
-
-    const [form, setFormValues] = useState({ name: "", email: "", password: "" });
-    const [isFormChanged, setIsFormChanged] = useState(false);
-    const dispatch = useDispatch();
-    const userData = useSelector((state) => state.user.data);
+    const dispatch = useAppDispatch();
+    const userData = useAppSelector<TUserData>(selectorUser);
+        const { values, handleChange, isFormChanged, setIsFormChanged, setValues } = useForm({
+        name: userData?.user.name || "",
+        email: userData?.user.email || "",
+        password: "",
+    });
 
     useEffect(() => {
-        if (userData && userData.user) {
-            setFormValues({
-                name: userData.user.name,
-                email: userData.user.email,
+        if (userData) {
+            setValues({
+                name: userData.user.name || "",
+                email: userData.user.email || "",
                 password: "",
             });
         }
-    }, [userData]);
+    }, [userData, setValues]);
 
-    const handleChange = (e) => {
-        setFormValues({ ...form, [e.target.name]: e.target.value });
-        setIsFormChanged(true);
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        dispatch(updateUserInfo(form));
+        dispatch(updateUserInfo(values));
         dispatch(checkUserAuth());
         setIsFormChanged(false);
     };
 
-    const handleCancel = (e) => {
-        e.preventDefault();
-        setFormValues({
-        name: userData.user.name,
-        email: userData.user.email,
-        password: "",
-        });
+    const handleCancel = () => {
+        setValues({
+            name: userData?.user.name || "",
+            email: userData?.user.email || "",
+            password: "",
+            });
+        setIsFormChanged(false);
     };
+
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -49,7 +56,7 @@ export default function ProfileInfo() {
                 type={"text"}
                 name={"name"}
                 placeholder={"Имя"}
-                value={form.name}
+                value={values.name}
                 onChange={handleChange}
                 icon={"EditIcon"}
                 error={false}
@@ -59,21 +66,21 @@ export default function ProfileInfo() {
                 type={"text"}
                 name={"email"}
                 placeholder={"e-mail"}
-                value={form.email}
+                value={values.email}
                 onChange={handleChange}
                 icon={"EditIcon"}
                 error={false}
                 extraClass={styles.email_input}
             />
             <PasswordInput
-                type={"text"}
+                // type={"text"}
                 name={"password"}
                 placeholder={"Пароль"}
-                value={form.password}
+                value={values.password}
                 onChange={handleChange}
                 size={"default"}
                 icon={"EditIcon"}
-                error={false}
+                // error={false}
                 extraClass={styles.password_input}
             />
             {isFormChanged && (

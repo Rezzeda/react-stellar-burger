@@ -1,8 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IngredientType } from "../utils/types";
 
 const sliceName = "burgerConstuctor"
 
-const initialState = {
+interface IBurgerConstructorState {
+  burgerBuns: IngredientType[];
+  otherIngredients: IngredientType[];
+}
+
+const initialState: IBurgerConstructorState = {
   burgerBuns: [],
   otherIngredients: [],
 };
@@ -20,7 +26,7 @@ export const burgerConstructorSlice = createSlice({
     removeIngredient(state, action) {
       state.otherIngredients = state.otherIngredients.filter(ingredient => ingredient.id !== action.payload.id);
     },
-    reorderIngredient(state, action) {
+    reorderIngredient(state, action: PayloadAction<{ from: number; to: number }>) {
       const { from, to } = action.payload;
       const sortedIngredients = [...state.otherIngredients];
       sortedIngredients.splice(to, 0, sortedIngredients.splice(from, 1)[0]);
@@ -33,6 +39,6 @@ export const burgerConstructorSlice = createSlice({
   },
 });
 
-export const { addBun, addIngredient, removeIngredient, reorderIngredient, reorderConstructor, clearBurger } = burgerConstructorSlice.actions;
+export const { addBun, addIngredient, removeIngredient, reorderIngredient, clearBurger } = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;
 

@@ -1,30 +1,26 @@
 import styles from './register.module.css'
 import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { registerUser } from '../../services/userSlice';
 import { useForm } from '../../hooks/useForm';
+import React, { FormEvent } from "react";
 
-export default function RegisterPage() {
-    const dispatch = useDispatch();
+interface IRegisterProps {
+    onRegister: (data: { email: string; password: string; name: string }) => void;
+}
 
-    // Используем ваш кастомный хук useForm
+const RegisterPage: React.FC<IRegisterProps> = ({ onRegister }) => {
     const { values, handleChange } = useForm({
         email: "",
         password: "",
         name: "",
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(registerUser(values)) // Отправляем данные из вашего кастомного хука
-            .unwrap()
-            .then((response) => {
-                console.log("Успешная регистрация:", response);
-            })
-            .catch((error) => {
-                console.error("Ошибка регистрации:", error);
-            });
+        if (!values.email || !values.password || !values.name) {
+            return;
+        }
+        onRegister(values as { email: string; password: string; name: string });
     };
 
     return (
@@ -68,7 +64,7 @@ export default function RegisterPage() {
                     htmlType="submit"
                     extraClass={styles.button}
                 >
-                    Войти
+                    Зарегистрироваться
                 </Button>
                 <p className="text text_type_main-default text_color_inactive">Уже зарегистрированы?{" "}
                     <Link to={"/login"} className={styles.link}>
@@ -77,5 +73,7 @@ export default function RegisterPage() {
                 </p>
             </form>
         </div>
-    )
-}
+    );
+};
+
+export default RegisterPage;

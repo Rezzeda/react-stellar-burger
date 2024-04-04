@@ -1,6 +1,6 @@
 import styles from './reset-password.module.css'
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/appHooks";
 import { resetPasswords } from '../../services/userSlice';
 import { Input, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate, useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ export default function ResetPasswordPage() {
     const [redirectToResetPassword, setRedirectToResetPassword] = useState(false);
     const location = useLocation();
     const [redirectToForgotPassword, setRedirectToForgotPassword] = useState(false);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
      // Используем кастомный хук useForm
     const { values, handleChange } = useForm({
@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
         return <Navigate to="/forgot-password" />;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch(resetPasswords(values));
         setRedirectToResetPassword(true);

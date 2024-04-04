@@ -3,15 +3,19 @@ import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { reorderIngredient, removeIngredient } from '../../services/burgerConstuctorSlice';
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { ingredientType } from '../../utils/types';
-import PropTypes from 'prop-types';
+import { useAppDispatch } from "../../hooks/appHooks";
+import { IngredientType } from '../../utils/types';
 
+interface IDraggableIngredientProps {
+    ingredient: IngredientType;
+    index: number;
+}
 
-export default function DraggableIngredient({ ingredient, index }) {
+const DraggableIngredient: React.FC<IDraggableIngredientProps> = ({ ingredient, index }) => {
+
     const id = ingredient.id;
-    const ref = useRef(null);
-    const dispatch = useDispatch();
+    const ref = useRef<HTMLDivElement>(null);
+    const dispatch = useAppDispatch();
 
     const [{ isDragging }, drag] = useDrag({
         type: "CONSTRUCTOR_ELEMENT",
@@ -23,7 +27,7 @@ export default function DraggableIngredient({ ingredient, index }) {
 
     const [, drop] = useDrop({
         accept: "CONSTRUCTOR_ELEMENT",
-        hover(item, monitor) {
+        hover(item: any, monitor) {
             const dragIndex = item.index;
             const hoverIndex = index;
             // проверка, что перемещаемый элемент не находится на той же позиции, что и элемент, на который он наведен
@@ -31,10 +35,10 @@ export default function DraggableIngredient({ ingredient, index }) {
                 return;
             }
             //координаты области drop и координаты указателя мыши, чтобы определить, находится ли перемещаемый элемент выше или ниже центра области drop
-            const hoverBoundingRect = ref.current.getBoundingClientRect();
+            const hoverBoundingRect = ref.current!.getBoundingClientRect();
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
             const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+            const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
             // если перемещаемый элемент перемещается вверх и находится выше центра области drop, 
             //или если он перемещается вниз и находится ниже центра области drop, ничего не происходит, и функция завершается.
@@ -75,7 +79,4 @@ export default function DraggableIngredient({ ingredient, index }) {
     );
 }
 
-DraggableIngredient.propTypes = {
-    ingredient: ingredientType.isRequired,
-    index: PropTypes.number.isRequired,
-};
+export default DraggableIngredient;

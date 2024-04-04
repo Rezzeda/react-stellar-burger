@@ -1,11 +1,11 @@
 import styles from "./order-details.module.css";
 import cn from "classnames";
 import doneIcon from '../../images/done.svg'
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../hooks/appHooks';
 import { selectorOrderNumber } from "../../services/selectors";
 
 export default function OrderDetails() {
-    const orderNumber = useSelector(selectorOrderNumber);
+    const orderNumber = useAppSelector(selectorOrderNumber);
 
     return (
         <div className={styles.container}>

@@ -9,20 +9,20 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import NotFoundPage from "../../pages/not-found/not-found";
 import LoginPage from "../../pages/login/login";
-import { useDispatch } from "react-redux";
 import HomePage from "../../pages/home/home";
 import RegisterPage from "../../pages/register/register";
 import ForgotPasswordPage from "../../pages/forgot-password/forgot-password";
 import ResetPasswordPage from "../../pages/reset-password/reset-password";
 import ProfilePage from "../../pages/profile/profile";
 import IngredientPage from "../../pages/ingredient/ingredient";
-import { getRegisterUser, getLoginUser } from "../../utils/api";
 import { checkUserAuth } from "../../services/userSlice";
 import ProtectedRoute from "../protected-route/protected-route";
 import { fetchIngredients } from "../../services/ingredientsSlice";
+import { loginUser, registerUser } from "../../services/userSlice";
+import { useAppDispatch } from "../../hooks/appHooks";
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state;
@@ -37,12 +37,12 @@ export default function App() {
     navigate(-1);
   };
 
-  const clbLogin = (dataUser) => {
-    dispatch(getLoginUser(dataUser));
+  const clbLogin = (dataUser: { email: string; password: string }) => {
+    dispatch(loginUser(dataUser));
   };
 
-  const clbRegister = (dataUser) => {
-    dispatch(getRegisterUser(dataUser));
+  const clbRegister = (dataUser: {name: string; email: string;  password: string;}) => {
+    dispatch(registerUser(dataUser));
   };
 
   useEffect(() => {
