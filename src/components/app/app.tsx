@@ -20,6 +20,10 @@ import ProtectedRoute from "../protected-route/protected-route";
 import { fetchIngredients } from "../../services/ingredientsSlice";
 import { loginUser, registerUser } from "../../services/userSlice";
 import { useAppDispatch } from "../../hooks/appHooks";
+import FeedPage from "../../pages/feed/feed";
+import OrderInfo from "../../pages/order-info/order-info";
+import ProfileInfo from "../profile-info/profile-info";
+import OrdersHistory from "../../pages/orders-history/orders-history";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -86,11 +90,28 @@ export default function App() {
             />
             <Route path="/profile" element={
               <ProtectedRoute>
-                <ProfilePage />
+                <ProfilePage>
+                  <ProfileInfo/>
+                </ProfilePage>
               </ProtectedRoute>
             }
             />
+            <Route path="/profile/orders" element={
+              <ProtectedRoute>
+                <ProfilePage>
+                  <OrdersHistory />
+                </ProfilePage>
+              </ProtectedRoute>
+            } />
+            <Route path="/profile/orders/:number" element={
+              <ProtectedRoute>
+                <OrderInfo />
+              </ProtectedRoute>
+            }
+          />
             <Route path="/ingredients/:id" element={<IngredientPage />} />
+            <Route path="/feed" element={<FeedPage />} />
+            <Route path="/feed/:number" element={<OrderInfo />} />
         </Routes>
       </main>
       </DndProvider>
@@ -104,13 +125,31 @@ export default function App() {
                 </Modal>
               }
             />
+            <Route
+              path="/feed/:number"
+              element={
+                <Modal title=" " onClose={closeModal}  style={{ width: "640px", height: "620px" }}>
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+            <Route
+              path="/profile/orders/:number"
+              element={
+                <ProtectedRoute>
+                  <Modal title="" onClose={closeModal} style={{ width: "640px", height: "620px" }}>
+                    <OrderInfo />
+                  </Modal>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         )}
-      {orderDetailsModal && (
-      <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", height: "718px" }}>
-        <OrderDetails />
-        </Modal>
-    )}
+        {orderDetailsModal && (
+          <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", height: "718px" }}>
+            <OrderDetails />
+          </Modal>
+        )}
       {/* {ingredientDetailsModal && (
         <Modal onClose={() => setIngredientDetailsModal(null)} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
         <IngredientDetails selectedIngredient={ingredientDetailsModal} />

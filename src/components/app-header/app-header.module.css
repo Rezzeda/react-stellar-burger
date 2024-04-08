@@ -21,11 +21,15 @@
 
 .link {
     text-decoration: none;
-    color: #f2f2f3;
+    color: #8585AD;
     display: flex;
     flex-direction: row;
     column-gap: 8px;
     padding: 16px 20px;
+}
+
+.link_active {
+    color: #f2f2f3;
 }
 
 .logo {

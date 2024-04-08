@@ -1,15 +1,18 @@
 import { getCookie, setCookie } from "./cookie";
+import { GetOrderType,
+    OrderResponseType,
+    RefreshResponseWithTokenType,
+    UserLoginType,
+    UserRegisterType,
+    UserResetPasswordType,
+    UserResponseType,
+    UserResponseWithTokenType } from "./types";
 
 // 1 раз объявляем базовый урл
 export const BASE_URL = "https://norma.nomoreparties.space/api/";
 
-type RequestOptions = {
-    method: string;
-    headers?: { [key: string]: string };
-    body?: string;
-};
 // создаем функцию проверки ответа на `ok`
-const checkResponse = (res: Response): Promise<any> => {
+const checkResponse = <T>(res: Response): Promise<T> => {
     if (res.ok) {
         return res.json();
     }
@@ -19,12 +22,11 @@ const checkResponse = (res: Response): Promise<any> => {
 
 // создаем универсальную фукнцию запроса с проверкой ответа и `success`
 // // В вызов приходит `endpoint`(часть урла, которая идет после базового) и опции
-const request = (endpoint: string, options: RequestOptions): Promise<any> => {
-    // а также в ней базовый урл сразу прописывается, чтобы не дублировать в каждом запросе
-    return fetch(`${BASE_URL}${endpoint}`, options)
-        .then(checkResponse)
-};
-
+async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+// а также в ней базовый урл сразу прописывается, чтобы не дублировать в каждом запросе
+    const response = await fetch(`${BASE_URL}${endpoint}`, options);
+    return checkResponse(response);
+}
 // В get-запросах даже не нужно указывать 2й параметр. 
 //Он получится undefined, что без проблем для fetch (который внутри).
 
@@ -36,50 +38,64 @@ interface IOrderData {
 }
 
 //Размещение заказа
-export const postOrder = (data: IOrderData): Promise<any> => {
-    return request("orders", {
+export const postOrder = (ingredients: IOrderData): Promise<any> => {
+    const accessToken = getCookie("accessToken");
+    if (!accessToken) {
+        throw new Error("Токен не найден");
+    }
+    return request<OrderResponseType>("orders", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+            authorization: accessToken,
+        } as HeadersInit,
+        body: JSON.stringify(ingredients),
+    });
+};
+
+//инфо о заказе
+export const getOrder = (orderNumber: string): Promise<any> => {
+    return request<GetOrderType>(`orders/${orderNumber}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        } as HeadersInit,
     });
 };
 
 // обовление токена
 export const refreshToken = (): Promise<any> => {
-    return request("auth/token", {
+    return request<UserResponseWithTokenType>("auth/token", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-        },
+        } as HeadersInit,
         // Используем функцию getCookie для получения refreshToken из cookie и передаем его в теле запроса
         body: JSON.stringify({ token: getCookie("refreshToken") }),
     });
 };
 
-
-export const requestWithRefresh = async (endpoint: string, options: RequestOptions = {method: 'GET'}): Promise<any> => {
+export const requestWithRefresh = async <T>(endpoint: string, options: RequestInit = {}): Promise<any> => {
     // Функция для выполнения запросов с обновлением токена
     try {
-        const res = await request(endpoint, options);
+        const res = await request<T>(endpoint, options);
         return res;
     } catch (error: any) {
         console.log("error requestWithRefresh");
         if (error.statusCode === 401 || error.statusCode === 403) {
             try {
-                const refreshData = await refreshToken(); // Используем refreshToken
+                const refreshData: RefreshResponseWithTokenType = await refreshToken(); // Используем refreshToken
                 if (!refreshData.success) {
                     return Promise.reject(refreshData);
                 }
                 setCookie("accessToken", refreshData.accessToken);
                 setCookie("refreshToken", refreshData.refreshToken);
-                return await request(endpoint, {
+                return await request<T>(endpoint, {
                     ...options,
                     headers: {
                         ...options.headers,
                         authorization: refreshData.accessToken,
-                    },
+                    } as HeadersInit,
                 });
             } catch (error) {
                 throw error;
@@ -89,19 +105,19 @@ export const requestWithRefresh = async (endpoint: string, options: RequestOptio
     }
 };
 
-export const getRegisterUser = (data: { email: string; password: string; name: string }): Promise<any> => request("auth/register", {
+export const getRegisterUser = (data: UserRegisterType): Promise<any> => request<UserResponseWithTokenType>("auth/register", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-    },
+    } as HeadersInit,
     body: JSON.stringify(data),
 });
 
-export const getLoginUser = (data: { email: string; password: string }): Promise<any> => requestWithRefresh("auth/login", {
+export const getLoginUser = (data: UserLoginType): Promise<any> => requestWithRefresh<UserResponseWithTokenType>("auth/login", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-    },
+    } as HeadersInit,
     body: JSON.stringify(data),
 });
 
@@ -110,28 +126,28 @@ export const getUser = (): Promise<any> => {
     if (!accessToken) {
         throw new Error("Токен не найден");
     }
-    return requestWithRefresh("auth/user", {
+    return requestWithRefresh<UserResponseType>("auth/user", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
             authorization: accessToken,
-        },
+        } as HeadersInit,
     });
 };
 
-export const forgotPassword = (email: string): Promise<any> => request("password-reset", {
+export const forgotPassword = (email: string): Promise<any> => request<UserResponseWithTokenType>("password-reset", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-    },
+    } as HeadersInit,
     body: JSON.stringify({ email }),
 });
 
-export const resetPassword = (data: { password: string; token: string }): Promise<any> => request("password-reset/reset", {
+export const resetPassword = (data: UserResetPasswordType): Promise<any> => request<UserResponseType>("password-reset/reset", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-    },
+    } as HeadersInit,
     body: JSON.stringify(data),
 });
 
@@ -140,20 +156,20 @@ export const updateProfile = (data: { email: string; name: string; password: str
     if (!accessToken) {
         throw new Error("Токен не найден");
     }
-    return requestWithRefresh("auth/user", {
+    return requestWithRefresh<UserResponseWithTokenType>("auth/user", {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             authorization: accessToken,
-        },
+        } as HeadersInit,
         body: JSON.stringify(data),
     });
 };
 
-export const logoutUser = (): Promise<any> => request("auth/logout", {
+export const logoutUser = (): Promise<void> => request("auth/logout", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
-    },
+    } as HeadersInit,
     body: JSON.stringify({ token: getCookie("refreshToken") }),
 });
