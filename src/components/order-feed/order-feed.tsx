@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './order-feed.module.css';
 import { Link } from "react-router-dom";
 import { FormattedDate, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -19,19 +19,15 @@ export default function OrderFeed({ order, url, showStatus = false }: OrderProps
     const location = useLocation();
     const maxNumberOfIngredients = 6;
 
-const SumOrder = (
-    order: OrderType,
-    ingredients: IngredientType[]
-): number => {
-    let totalPrice = 0;
-    order.ingredients.forEach((id) => {
-        const ingredient = ingredients.find((item) => item._id === id);
+const SumOrder = useMemo<number>(() => {
+    return order.ingredients.reduce((totalPrice, id) => {
+        const ingredient = allIngredients.find(item => item._id === id);
         if (ingredient) {
             totalPrice += ingredient.price;
         }
-    });
-    return totalPrice;
-};
+        return totalPrice;
+    }, 0);
+}, [order.ingredients, allIngredients]);
 
     return (
         <Link
@@ -66,7 +62,7 @@ const SumOrder = (
                 ))}
                 </div>
                 <div className={styles.price}>
-                <p className="text text_type_digits-default">{SumOrder(order, allIngredients)}</p>
+                <p className="text text_type_digits-default">{SumOrder}</p>
                 <CurrencyIcon type="primary" />
                 </div>
             </div>

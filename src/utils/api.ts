@@ -8,6 +8,9 @@ import { GetOrderType,
     UserResponseType,
     UserResponseWithTokenType } from "./types";
 
+export const wsUrl = "wss://norma.nomoreparties.space/orders/all";
+
+
 // 1 раз объявляем базовый урл
 export const BASE_URL = "https://norma.nomoreparties.space/api/";
 

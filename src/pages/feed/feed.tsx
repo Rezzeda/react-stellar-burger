@@ -5,11 +5,11 @@ import OrderFeed from '../../components/order-feed/order-feed';
 import TotalOrders from '../../components/total-orders/total-orders';
 import { useAppDispatch, useAppSelector } from '../../hooks/appHooks';
 import { wsConnectFeed, wsDisconnectFeed } from '../../services/feed/actions';
+import { wsUrl } from '../../utils/api';
 
 
 export default function FeedPage() {
     const dispatch = useAppDispatch();
-    const wsUrl = "wss://norma.nomoreparties.space/orders/all";
     const orders = useAppSelector(store => store.feed.data);
 
     useEffect(() => {

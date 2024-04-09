@@ -128,7 +128,7 @@ export default function App() {
             <Route
               path="/feed/:number"
               element={
-                <Modal title=" " onClose={closeModal}  style={{ width: "640px", height: "620px" }}>
+                <Modal title="Детали заказа" onClose={closeModal}  style={{ width: "640px", height: "620px" }}>
                   <OrderInfo />
                 </Modal>
               }
@@ -137,7 +137,7 @@ export default function App() {
               path="/profile/orders/:number"
               element={
                 <ProtectedRoute>
-                  <Modal title="" onClose={closeModal} style={{ width: "640px", height: "620px" }}>
+                  <Modal title="Детали заказа" onClose={closeModal} style={{ width: "640px", height: "620px" }}>
                     <OrderInfo />
                   </Modal>
                 </ProtectedRoute>
