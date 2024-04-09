@@ -120,7 +120,7 @@ export default function App() {
             <Route
               path="/ingredients/:id"
               element={
-                <Modal onClose={closeModal} title={'Детали ингредиента'} style={{ width: '720px', height: '538px' }}>
+                <Modal onClose={closeModal} title={'Детали ингредиента'} style={{ width: '720px', minHeight: '538px' }}>
                   <IngredientDetails />
                 </Modal>
               }
@@ -128,7 +128,7 @@ export default function App() {
             <Route
               path="/feed/:number"
               element={
-                <Modal title="Детали заказа" onClose={closeModal}  style={{ width: "640px", height: "620px" }}>
+                <Modal title="Детали заказа" onClose={closeModal}  style={{ width: "640px", minHeight: "620px" }}>
                   <OrderInfo />
                 </Modal>
               }
@@ -137,7 +137,7 @@ export default function App() {
               path="/profile/orders/:number"
               element={
                 <ProtectedRoute>
-                  <Modal title="Детали заказа" onClose={closeModal} style={{ width: "640px", height: "620px" }}>
+                  <Modal title="Детали заказа" onClose={closeModal} style={{ width: "640px", minHeight: "620px" }}>
                     <OrderInfo />
                   </Modal>
                 </ProtectedRoute>
@@ -146,7 +146,7 @@ export default function App() {
           </Routes>
         )}
         {orderDetailsModal && (
-          <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", height: "718px" }}>
+          <Modal title={""} onClose={() => setOrderDetailsModal(false)} style={{ width: "720px", minHeight: "718px" }}>
             <OrderDetails />
           </Modal>
         )}
