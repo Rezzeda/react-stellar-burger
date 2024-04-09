@@ -46,6 +46,8 @@ export const selectorIngredientCounts = createSelector(
 );
 
 export const selectorOrderNumber = (store: RootState ) => store[orderSlice.name].orderNumber;
+export const selectorCurrentOrder = (store: RootState ) => store[orderSlice.name].currentOrder;
+export const selectorisLoadingOrder = (store: RootState ) => store[orderSlice.name].isLoading;
 
 export const getIsAuthChecked = createSelector(
     (store: RootState) => store[userSlice.name].IsAuthChecked,

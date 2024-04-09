@@ -1,0 +1,43 @@
+.container {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.container::before {
+    width: 100%;
+    height: 100%;
+    content: "";
+    position: absolute;
+    background: linear-gradient(to left, #801AB2, #4C4CFF);
+    border-radius: 50%;
+    z-index: -1;
+    padding: 2px;
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    background: #131316;
+    border-radius: 50%;
+}
+
+.counter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    border-radius: 50%;
+    background-color: rgb(0 0 0 / 30%);
+}

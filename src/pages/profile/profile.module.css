@@ -1,7 +1,7 @@
 .container {
     display: flex;
     margin-top: 120px;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
     gap: 60px;
 }
@@ -54,5 +54,5 @@
 }
 
 .profile_info {
-    width: 480px;
+    width: 844px;
 }
