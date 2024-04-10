@@ -6,7 +6,7 @@ export const sliceName = "user";
 
 type State = { [key: string]: boolean | null;};
 
-const initialState = {
+export const initialState = {
     IsAuthChecked: false,
     data: null,
 

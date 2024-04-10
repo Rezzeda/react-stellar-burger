@@ -8,7 +8,7 @@ interface IBurgerConstructorState {
   otherIngredients: IngredientType[];
 }
 
-const initialState: IBurgerConstructorState = {
+export const initialState: IBurgerConstructorState = {
   burgerBuns: [],
   otherIngredients: [],
 };

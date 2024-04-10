@@ -9,14 +9,12 @@ interface IIngredientsState {
   allIngredients: IngredientType[];
   loading: boolean;
   error: string | null;
-  currentTab: string | null;
 }
 
-const initialState: IIngredientsState = {
+export const initialState: IIngredientsState = {
   allIngredients: [],
   loading: false, // Флаг для отслеживания состояния загрузки
   error: null, // Переменная для хранения ошибки, если она произойдет во время загрузки
-  currentTab: null,
 };
 
 export const fetchIngredients = createAsyncThunk(
