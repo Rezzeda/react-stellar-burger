@@ -70,7 +70,7 @@ const BurgerIngredients: React.FC<IBurgerIngredientsProps> = ({ setModal }) => {
                     <h2 className={cn('text text_type_main-medium')}>
                         {typeToTitle[type] || type}
                     </h2>
-                    <ul className={cn(styles.ingredients__list, 'custom-scroll')}>
+                    <ul className={cn(styles.ingredients__list, 'custom-scroll')} data-cy="ingredients">
                         {ingredientTypes[type].map((ingredient) => (
                             <li key={ingredient._id} className={cn(styles.category, 'mb-10')}>
                                 <Category {...ingredient} onClick={() => setModal({ ...ingredient, showModal: true })} />

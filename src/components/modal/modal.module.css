@@ -19,3 +19,12 @@
 .title {
     color: #f2f2f3;
 }
+
+.btn_close {
+    background-color: transparent;
+    border: none;
+}
+
+.btn_close:hover {
+    opacity: 0.3;
+}

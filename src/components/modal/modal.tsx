@@ -33,8 +33,8 @@ interface IModalProps {
                   <ModalOverlay onClose={onClose}>
                       <div className={cn(styles.modal_container, 'p-10')} style={style}>
                           <div className={cn(styles.container)}>
-                              <h2 className={cn('text text_type_main-large', styles.title)}>{title}</h2>
-                              <CloseIcon type="primary" onClick={onClose} />
+                              <h2 className={cn('text text_type_main-large', styles.title)} >{title}</h2>
+                              <button className={cn(styles.btn_close)} data-cy="close-modal" type="button" onClick={onClose}><CloseIcon type="primary" /></button>
                           </div>
                           {children}
                       </div>

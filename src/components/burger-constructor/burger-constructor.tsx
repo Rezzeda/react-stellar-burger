@@ -115,7 +115,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
   };
 
   return (
-    <div ref={drop}>
+    <div ref={drop} data-cy="constructor">
       <div className={styles.container_main}>
         {/* Проверяем, есть ли элементы в burgerBuns, если нет, используем плейсхолдер */}
         {burgerBuns.length === 0 ? (
@@ -130,7 +130,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
           </div>
         ) : (
           burgerBuns.map((bun, index) => (
-            <div key={index} className={cn(styles.element_locked, 'pl-4')}>
+            <div key={index} className={cn(styles.element_locked, 'pl-4')} data-cy="bun-top">
               <ConstructorElement
                 type="top"
                 isLocked={true}
@@ -141,7 +141,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
             </div>
           ))
         )}
-        <div className={cn(styles.elementcontainer, 'custom-scroll', 'pl-4')}>
+        <div className={cn(styles.elementcontainer, 'custom-scroll', 'pl-4')} data-cy="constructor-ingredients">
         {otherIngredients.length === 0 ? (
           <div className={styles.element_main} key={placeholderIngredient.id}>
           <DragIcon type="primary" />
@@ -169,7 +169,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
           </div>
         ) : (
           burgerBuns.map((bun, index) => (
-            <div key={index} className={cn(styles.element_locked, 'pl-4')}>
+            <div key={index} className={cn(styles.element_locked, 'pl-4')} data-cy="bun-bottom">
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
@@ -187,6 +187,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
           <p className={cn('text text_type_digits-medium')}>{totalPrice}</p>
           <CurrencyIcon type="primary" />
             <Button
+              data-cy="order-button"
               htmlType="button"
               type="primary"
               size="large"
