@@ -7,11 +7,11 @@ const testBun = {
     type: "bun",
     image: "bun",
     price: 0,
-    id: "1",
     proteins: 0,
     fat: 0,
     carbohydrates: 0,
     calories: 0,
+    uniqueId: "1",
 };
 
 const testOtherIngredient = {
@@ -20,11 +20,11 @@ const testOtherIngredient = {
     type: "other",
     image: "other",
     price: 0,
-    id: "2",
     proteins: 0,
     fat: 0,
     carbohydrates: 0,
     calories: 0,
+    uniqueId: "2",
 };
 
 const testAnotherIngredient = {
@@ -33,11 +33,11 @@ const testAnotherIngredient = {
     type: "other",
     image: "other",
     price: 0,
-    id: "3",
     proteins: 0,
     fat: 0,
     carbohydrates: 0,
     calories: 0,
+    uniqueId: "3",
 };
 
 const stateWithIngredients = {

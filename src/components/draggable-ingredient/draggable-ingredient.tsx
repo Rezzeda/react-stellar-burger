@@ -13,7 +13,7 @@ interface IDraggableIngredientProps {
 
 const DraggableIngredient: React.FC<IDraggableIngredientProps> = ({ ingredient, index }) => {
 
-    const id = ingredient.id;
+    const id = ingredient.uniqueId;
     const ref = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch();
 

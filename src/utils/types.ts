@@ -4,11 +4,11 @@ export type IngredientType = {
     type: string;
     image: string;
     price: number;
-    id: string;
     proteins: number;
     fat: number;
     carbohydrates: number;
     calories: number;
+    uniqueId: string;
 };
 
 export type wsConnect = {
