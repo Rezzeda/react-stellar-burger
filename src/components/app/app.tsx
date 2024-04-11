@@ -62,7 +62,7 @@ export default function App() {
           location={ state && state.backgroundLocation 
           ? state.backgroundLocation
           : location}>
-            <Route path="/" element={<HomePage setIngredientDetailsModal={setIngredientDetailsModal} setOrderDetailsModal={setOrderDetailsModal} />} />
+            <Route path="/react-stellar-burger/" element={<HomePage setIngredientDetailsModal={setIngredientDetailsModal} setOrderDetailsModal={setOrderDetailsModal} />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/login" element={
               <ProtectedRoute onlyUnAuth>
