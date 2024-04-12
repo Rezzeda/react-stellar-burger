@@ -17,9 +17,9 @@ export default function AppHeader() {
                 <ul className={styles.left_container}>
                     <li className={styles.item}>
                         <NavLink className={cn(styles.link, {
-                            [styles.link_active]: pathname === "/",
-                        })} to="/">
-                            <BurgerIcon type={pathname === "/" ? "primary" : "secondary"} />
+                            [styles.link_active]: pathname === "/react-stellar-burger/",
+                        })} to="/react-stellar-burger/">
+                            <BurgerIcon type={pathname === "/react-stellar-burger/" ? "primary" : "secondary"} />
                             <p className="text text_type_main-default">Конструктор</p>
                         </NavLink>
                     </li>
@@ -34,7 +34,7 @@ export default function AppHeader() {
                 </ul>
             </nav>
             <div className={styles.logo}>
-                <NavLink className={styles.link} to="/">
+                <NavLink className={styles.link} to="/react-stellar-burger/">
                     <Logo />
                 </NavLink>
             </div>

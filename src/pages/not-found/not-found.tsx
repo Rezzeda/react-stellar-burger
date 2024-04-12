@@ -8,7 +8,7 @@ export default function NotFoundPage() {
             <h1 className={cn('text text_type_digits-large mb-8')}>404</h1>
             <p className={cn('text text_type_main-large mb-8')}>Страница не найдена</p>
             <p className="text text_type_main-medium text_color_inactive">
-                <Link to={"/"} className={styles.link}>
+                <Link to={"/react-stellar-burger/"} className={styles.link}>
                     На главную
                 </Link>
             </p>
