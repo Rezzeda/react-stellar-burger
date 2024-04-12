@@ -5,10 +5,10 @@ import { CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-co
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/appHooks";
 import { useDrop } from 'react-dnd';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { selectorBurgerBuns, selectorOtherIngredients, selectorUser } from '../../services/selectors';
 import DraggableIngredient from "../draggable-ingredient/draggable-ingredient";
-import {  addBun, addIngredient, clearBurger } from '../../services/burgerConstuctorSlice';
+import {  addBun, addIngredient, addIngredientWithId, clearBurger } from '../../services/burgerConstuctorSlice';
 import { useMemo } from "react";
 import { submitOrder } from '../../services/orderSlice';
 import { useNavigate } from 'react-router-dom';
@@ -48,10 +48,12 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
     accept: "INGREDIENT",
     drop: (item: IngredientType) => {
       if (item.type === 'bun') {
-        dispatch(addBun(item));
+        // dispatch(addBun(item));
+        dispatch(addBun(addIngredientWithId(item).payload)); // Используем action creator
       } else {
-        const newIngredient = { ...item, id: uuidv4() };
-        dispatch(addIngredient(newIngredient));
+        // const newIngredient = { ...item, id: uuidv4() };
+        // dispatch(addIngredient(newIngredient));
+        dispatch(addIngredient(addIngredientWithId(item).payload)); // Используем action creator
       }
     },
     collect: (monitor) => ({
@@ -81,7 +83,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
     }
     setIsLoading(true); // Устанавливаем состояние загрузки при начале отправки запроса
     // Создаем массив _id всех ингредиентов
-    const ingredientIds = [...burgerBuns.map(bun => bun._id), ...otherIngredients.map(ingredient => ingredient._id)];
+    const ingredientIds = [...burgerBuns.map(bun => bun._id), ...otherIngredients.map(ingredient => ingredient._id), ...burgerBuns.map(bun => bun._id)];
       try {
         await dispatch(submitOrder(ingredientIds));
         setModal(true);
@@ -115,7 +117,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
   };
 
   return (
-    <div ref={drop}>
+    <div ref={drop} data-cy="constructor">
       <div className={styles.container_main}>
         {/* Проверяем, есть ли элементы в burgerBuns, если нет, используем плейсхолдер */}
         {burgerBuns.length === 0 ? (
@@ -129,8 +131,8 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
             />
           </div>
         ) : (
-          burgerBuns.map((bun, index) => (
-            <div key={index} className={cn(styles.element_locked, 'pl-4')}>
+          burgerBuns.map((bun) => (
+            <div key={bun.uniqueId} className={cn(styles.element_locked, 'pl-4')} data-cy="bun-top">
               <ConstructorElement
                 type="top"
                 isLocked={true}
@@ -141,7 +143,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
             </div>
           ))
         )}
-        <div className={cn(styles.elementcontainer, 'custom-scroll', 'pl-4')}>
+        <div className={cn(styles.elementcontainer, 'custom-scroll', 'pl-4')} data-cy="constructor-ingredients">
         {otherIngredients.length === 0 ? (
           <div className={styles.element_main} key={placeholderIngredient.id}>
           <DragIcon type="primary" />
@@ -153,7 +155,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
         </div>
         ) : (
           otherIngredients.map((ingredient, index) => (
-            <DraggableIngredient key={ingredient.id} ingredient={ingredient} index={index} />
+            <DraggableIngredient key={ingredient.uniqueId} ingredient={ingredient} index={index} />
           ))
         )}
         </div>
@@ -168,8 +170,8 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
             />
           </div>
         ) : (
-          burgerBuns.map((bun, index) => (
-            <div key={index} className={cn(styles.element_locked, 'pl-4')}>
+          burgerBuns.map((bun) => (
+            <div key={bun.uniqueId} className={cn(styles.element_locked, 'pl-4')} data-cy="bun-bottom">
               <ConstructorElement
                 type="bottom"
                 isLocked={true}
@@ -187,6 +189,7 @@ const BurgerConstructor: React.FC<IBurgerConstructorProps> = ({ setModal }) => {
           <p className={cn('text text_type_digits-medium')}>{totalPrice}</p>
           <CurrencyIcon type="primary" />
             <Button
+              data-cy="order-button"
               htmlType="button"
               type="primary"
               size="large"

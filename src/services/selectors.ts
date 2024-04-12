@@ -15,19 +15,19 @@ export const selectorOtherIngredients = (store: RootState ) => store[burgerConst
 export const selectorIngredientCounts = createSelector(
     [selectorOtherIngredients, selectorBurgerBuns],
     (otherIngredients, burgerBuns) => {
-        const ingredientCounts: { [key: string]: { id: string, _id: string, count: number }[] } = {};
+        const ingredientCounts: { [key: string]: { uniqueId: string, _id: string, count: number }[] } = {};
 
         // Подсчет уникальных ингредиентов из otherIngredients
         otherIngredients.forEach((ingredient) => {
-            const { _id, id } = ingredient;
+            const { _id, uniqueId } = ingredient;
             if (!ingredientCounts[_id]) {
                 ingredientCounts[_id] = [];
             }
-            const existingIngredient = ingredientCounts[_id].find(item => item.id === id);
+            const existingIngredient = ingredientCounts[_id].find(item => item.uniqueId === uniqueId);
             if (existingIngredient) {
                 existingIngredient.count++;
             } else {
-                ingredientCounts[_id].push({ id, _id, count: 1 });
+                ingredientCounts[_id].push({ uniqueId, _id, count: 1 });
             }
         });
 
@@ -38,7 +38,7 @@ export const selectorIngredientCounts = createSelector(
                 ingredientCounts[_id] = [];
             }
             // Булки не имеют поля id, поэтому оставляем его пустым, количество 2 т.к. сверху и снизу булка
-            ingredientCounts[_id].push({ id: '', _id, count: 2 });
+            ingredientCounts[_id].push({ uniqueId: '', _id, count: 2 });
         });
         
         return ingredientCounts;

@@ -9,7 +9,7 @@ export default function OrderDetails() {
 
     return (
         <div className={styles.container}>
-            <h2 className={cn('text text_type_digits-large mb-8', styles.title)}>{orderNumber}</h2>
+            <h2 className={cn('text text_type_digits-large mb-8', styles.title)} data-cy="order-number">{orderNumber}</h2>
             <p className={cn('text text_type_main-medium')}>идентификатор заказа</p>
             <img className={cn(styles.image, 'mb-15 mt-15')} src={doneIcon} alt="Заказ оформлен"/>
             <p className={cn('text text_type_main-default mb-2')}>Ваш заказ начали готовить</p>
